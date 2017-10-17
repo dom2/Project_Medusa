@@ -12,7 +12,7 @@ import App from '../App';
 
 const Routes = (
   <Switch>
-    <Route exact path="/" component={Login}/>
+    <Route exact path="/" component={App}/>
     <Route path="/LoginNav" component={LoginNav}/>
     <Route path="/Register" component={Register}/>
     <Route path="/Login" component={Login}/>
