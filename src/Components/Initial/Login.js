@@ -35,12 +35,14 @@ class LoginForm extends Component {
       .validateFields((err, values) => {
         if (!err) {
           console.log('Received values of form: ', values);
-
           checkLogin(values.userName, values.password).then(a => {
+            console.log(a);
             if (a === 'Admin') {
               this.setState({adminRedirect: true});
+            } else 
+              console.log(a);
             }
-          });
+          );
         }
       });
   }

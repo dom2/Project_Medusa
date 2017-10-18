@@ -13,6 +13,8 @@ import {cardStyles, vmCard} from '../../theme/styles';
 import {Link} from "react-router-dom";
 import goldImage from '../../theme/images/gold_image.png';
 import vmImage from '../../theme/images/vm.png';
+import {getBlueprint} from '../server/Blueprint';
+import GoldCard from '../Cards/GoldCard';
 
 const vMenu = (
   <Menu>
@@ -29,68 +31,40 @@ const vMenu = (
 );
 
 class AdminConsole extends Component {
+  constructor() {
+    super();
+    this.state = {
+      cardTitle: null
+    }
+  }
+
+  componentDidMount() {
+    getBlueprint().then(response => {
+      if (response) 
+        this.setState({cardTitle: response.description});
+      console.log(response.description);
+    }).catch(error => {
+      console.log(error);
+      return '';
+    });
+  }
 
   render() {
-    return (
-      <Row gutter={12}>
-        <Col span={6}>
-          <Card title="Gold Image" bordered={false} style={vmCard}>
-            <img src={goldImage}/>
-            <div>
-              <Button type="primary" size="large">Create Instance</Button>
-            </div>
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card title="VM1" bordered={false} style={vmCard}>
-            <img src={vmImage}/>
-            <br/>
-            <div>
-              <Badge status="success" text="Running"/>
-              <Dropdown overlay={vMenu}>
-                <a className="ant-dropdown-link" href="#">
-                  Actions
-                  <Icon type="down"/>
-                </a>
-              </Dropdown>
-            </div>
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card title="VM2" bordered={false} style={vmCard}>
-            <img src={vmImage}/>
-            <br/>
-
-            <div>
-              <Badge status="warning" text="Paused"/>
-              <Dropdown overlay={vMenu}>
-                <a className="ant-dropdown-link" href="#">
-                  Actions
-                  <Icon type="down"/>
-                </a>
-              </Dropdown>
-            </div>
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card title="VM3" bordered={false} style={vmCard}>
-            <img src={vmImage}/>
-            <br/>
-
-            <div>
-              <Badge status="error" text="Stopped"/>
-              <Dropdown overlay={vMenu}>
-                <a className="ant-dropdown-link" href="#">
-                  Actions
-                  <Icon type="down"/>
-                </a>
-              </Dropdown>
-            </div>
-          </Card>
-        </Col>
-      </Row>
-    );
+    if (this.state.cardTitle) {
+      return (
+        <Row gutter={12}>
+          <Col span={6}>
+            <GoldCard title={this.state.cardTitle}/>
+          </Col>
+        </Row>
+      );
+    } else 
+      return (
+        <Button type="primary" size="large" loading>
+          Loading
+        </Button>
+      );
+    }
   }
-}
 
 export default AdminConsole;
