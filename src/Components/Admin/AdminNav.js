@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import logo from '../../theme/images/logo.png';
 import AdminConsole from './AdminConsole';
-import {Layout, Menu, Button} from 'antd';
+import {Layout, Menu} from 'antd';
 import {contentStyles, medusa, headStyles} from '../../theme/styles';
 
 const {Header, Content} = Layout;
@@ -12,7 +12,7 @@ class AdminNav extends Component {
       <Layout>
         <Header style={headStyles}>
           <span style={medusa}>
-            Project Medusa
+            <img src={logo} alt=""/>
           </span>
 
           <Menu
@@ -27,7 +27,14 @@ class AdminNav extends Component {
             <Menu.Item key="1">Admin Console</Menu.Item>
             <Menu.Item key="2">User Management</Menu.Item>
           </Menu>
-          <Button></Button>
+          <Menu
+            mode="horizontal"
+            style={{
+            lineHeight: '64px',
+            float: 'right'
+          }}>
+            <Menu.Item key="1">Logout</Menu.Item>
+          </Menu>
         </Header>
         <Content style={contentStyles}>
           <AdminConsole/>

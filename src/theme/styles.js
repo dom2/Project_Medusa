@@ -20,11 +20,8 @@ export const contentStyles = {
 }
 
 export const medusa = {
-  margin: "16px 24px 16px 0",
-  fontSize: '1.5rem',
   lineHeight: '64px',
   float: 'left'
-
 }
 
 export const headStyles = {
