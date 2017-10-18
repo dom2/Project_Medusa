@@ -28,6 +28,12 @@ const columns = [
         </span>
         <a href="#">
           Update Password</a>
+        <span className="ant-divider">
+          /
+        </span>
+        <a href="#">
+          Associate VM</a>
+
       </span>
     )
   }
@@ -58,9 +64,10 @@ class UserConsole extends Component {
     return (
       <div>
         <Button
-          type="primary"
+          type="danger"
           icon="plus"
           size='large'
+          ghost
           style={{
           marginBottom: '20px'
         }}>Create User</Button>

@@ -9,7 +9,9 @@ const themeVars = {
     "@body-background": gray,
     "@layout-header-background": white,
     "@font-size-base": "16px",
-    "@table-header-bg": red
+    "@table-header-bg": slate,
+    "@table-row-hover-bg": white,
+    "@heading-color": white
 };
 
 module.exports = {
