@@ -11,7 +11,8 @@ const themeVars = {
     "@font-size-base": "16px",
     "@table-header-bg": slate,
     "@table-row-hover-bg": white,
-    "@heading-color": white
+    "@heading-color": white,
+    "@card-head-color": slate
 };
 
 module.exports = {
