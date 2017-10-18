@@ -23,7 +23,7 @@ const vMenu = (
       <a target="_blank" rel="noopener noreferrer" href="">Stop</a>
     </Menu.Item>
     <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="">Kill</a>
+      <a target="_blank" rel="noopener noreferrer" href="">Destroy</a>
     </Menu.Item>
   </Menu>
 );

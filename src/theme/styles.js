@@ -21,7 +21,10 @@ export const contentStyles = {
 
 export const medusa = {
   lineHeight: '64px',
-  float: 'left'
+  float: 'left',
+  height: '60px',
+  width: '154px',
+  marginRight: '20px'
 }
 
 export const headStyles = {

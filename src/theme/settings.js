@@ -7,7 +7,9 @@ const white = '#FFF';
 const themeVars = {
     "@primary-color": slate,
     "@body-background": gray,
-    "@layout-header-background": gray
+    "@layout-header-background": white,
+    "@font-size-base": "16px",
+    "@table-header-bg": red
 };
 
 module.exports = {

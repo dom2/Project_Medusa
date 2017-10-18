@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import logo from '../../theme/images/logo.png';
 import AdminConsole from './AdminConsole';
+import UManagement from './UserManagement';
 import {Layout, Menu} from 'antd';
 import {contentStyles, medusa, headStyles} from '../../theme/styles';
 
@@ -11,18 +12,15 @@ class AdminNav extends Component {
     return (
       <Layout>
         <Header style={headStyles}>
-          <span style={medusa}>
-            <img src={logo} alt=""/>
-          </span>
-
+          <img src={logo} alt="" style={medusa}/>
           <Menu
-            theme="dark"
+            theme="light"
             mode="horizontal"
             defaultSelectedKeys={['1']}
             style={{
-            lineHeight: '64px',
+            lineHeight: '62px',
             float: 'left',
-            color: '#F80000'
+            color: '#DEE0E0'
           }}>
             <Menu.Item key="1">Admin Console</Menu.Item>
             <Menu.Item key="2">User Management</Menu.Item>
@@ -30,14 +28,14 @@ class AdminNav extends Component {
           <Menu
             mode="horizontal"
             style={{
-            lineHeight: '64px',
+            lineHeight: '62px',
             float: 'right'
           }}>
             <Menu.Item key="1">Logout</Menu.Item>
           </Menu>
         </Header>
         <Content style={contentStyles}>
-          <AdminConsole/>
+          <UManagement/>
         </Content>
       </Layout>
     );

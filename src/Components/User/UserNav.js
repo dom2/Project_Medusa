@@ -11,13 +11,13 @@ class UserNav extends Component {
     return (
       <Layout>
         <Header style={headStyles}>
-          <div>
-            <img src={logo} height={60} width={195} alt=""/>
-            <span style={medusa}>
-              Project Medusa</span>
-          </div>
-
-          <Menu theme="dark" mode="horizontal">
+          <img src={logo} alt="" style={medusa}/>
+          <Menu
+            mode="horizontal"
+            style={{
+            lineHeight: '62px',
+            float: 'right'
+          }}>
             <Menu.Item key="1">Logout</Menu.Item>
           </Menu>
         </Header>

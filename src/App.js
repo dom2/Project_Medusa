@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import LoginNav from './Components/Initial/LoginNav';
 import {Route, Link, Switch} from "react-router-dom";
 import AdminNav from './Components/Admin/AdminNav';
 import Register from './Components/Initial/Register';

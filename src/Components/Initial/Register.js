@@ -51,12 +51,7 @@ class RegisterForm extends Component {
     return (
       <Layout>
         <Header style={headStyles}>
-          <div>
-            <img src={logo} height={60} width={195} alt=""/>
-            <span style={medusa}>
-              Project Medusa
-            </span>
-          </div>
+          <img src={logo} alt="" style={medusa}/>
         </Header>
         <Content style={contentStyles}>
           <Row>
