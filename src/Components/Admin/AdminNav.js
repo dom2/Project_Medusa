@@ -12,7 +12,7 @@ class AdminNav extends Component {
   constructor() {
     super();
     this.state = {
-      current: 1
+      current: 'a'
     };
   }
 
@@ -35,10 +35,10 @@ class AdminNav extends Component {
             float: 'left',
             color: '#DEE0E0'
           }}>
-            <Menu.Item key="1">
+            <Menu.Item key="a">
               <Link to="/AdminNav/AdminConsole">Admin Console</Link>
             </Menu.Item>
-            <Menu.Item key="2">
+            <Menu.Item key="u">
               <Link to="/AdminNav/UManagement">User Management</Link>
             </Menu.Item>
           </Menu>

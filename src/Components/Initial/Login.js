@@ -16,7 +16,7 @@ import Register from './Register';
 import AdminNav from '../Admin/AdminNav';
 import {cardStyles, contentStyles, medusa, headStyles} from '../../theme/styles';
 import {Link, Redirect} from "react-router-dom";
-
+import {getAllVDI} from '../server/LoginRegister';
 const {Header, Content} = Layout;
 const FormItem = Form.Item;
 
@@ -35,7 +35,8 @@ class LoginForm extends Component {
       .validateFields((err, values) => {
         if (!err) {
           console.log('Received values of form: ', values);
-          this.setState({adminRedirect: true})
+          this.setState({adminRedirect: true});
+          getAllVDI();
         }
       });
   }
