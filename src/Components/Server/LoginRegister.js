@@ -1,19 +1,22 @@
 import axios from 'axios';
+var token = require('basic-auth-token');
 
 const url = 'http://129.146.85.80:8000/';
 
-export async function checkLogin(username, password) {
-  var login = url + "login/" + username.toLowerCase() + "/" + password;
+export async function checkLogin(user, pass) {
+  var login = url + "login";
+  var lToken = "Basic " + token(user, pass);
+  var auth = {
+    headers: {
+      "Authorization": lToken
+    }
+  }
   return axios
-    .get(login)
+    .get(login, auth)
     .then(function (response) {
-      console.log(response);
-      if (response.data.IS_AUTHENTICATED === "TRUE") {
-        return true;
-      } else 
-        return false;
-      }
-    )
+      console.log(response.data);
+      return response.data;
+    })
     .catch(function (error) {
       console.log(error);
       return false;
