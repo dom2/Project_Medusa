@@ -41,7 +41,7 @@ class CloneCard extends Component {
         <img src={vmImage}/>
         <br/>
         <div>
-          <Badge status={this.props.status} text={this.props.title}/>
+          <Badge status={this.props.status} text={this.props.status}/>
           <Dropdown overlay={vMenu}>
             <a className="ant-dropdown-link" href="#">
               Actions

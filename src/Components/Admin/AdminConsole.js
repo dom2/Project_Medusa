@@ -15,6 +15,7 @@ import goldImage from '../../theme/images/gold_image.png';
 import vmImage from '../../theme/images/vm.png';
 import {getBlueprint} from '../server/Blueprint';
 import GoldCard from '../Cards/GoldCard';
+import CloneCard from '../Cards/CloneCard';
 
 const vMenu = (
   <Menu>
@@ -34,7 +35,8 @@ class AdminConsole extends Component {
   constructor() {
     super();
     this.state = {
-      cardTitle: null
+      cardTitle: null,
+      colCount: 0
     }
   }
 
@@ -50,6 +52,13 @@ class AdminConsole extends Component {
   }
 
   render() {
+    const cols = [];
+    cols.push(
+      <Col span={6}>
+        <GoldCard title={this.state.cardTitle}/>
+      </Col>
+    );
+
     if (this.state.cardTitle) {
       return (
         <Row gutter={12}>
