@@ -14,15 +14,22 @@ import goldImage from '../../theme/images/gold_image.png';
 import {cloneBlueprint} from '../server/Blueprint';
 
 class GoldCard extends Component {
-  constructor() {
-    super();
+
+  constructor(props) {
+    super(props);
     this.state = {
-      clones: 0
+      clones: 1
     };
   }
 
   handleCreate = (e) => {
-    cloneBlueprint();
+    var that = this;
+    console.log(this.state.clones);
+    cloneBlueprint(this.state.clones).then(function (r) {
+      if (r === 'CREATED') {
+        that.props.func;
+      }
+    });
   }
 
   changeNum = (value) => {
@@ -33,14 +40,14 @@ class GoldCard extends Component {
     const content = (
       <div>
         <InputNumber min={1} max={10} defaultValue={1} onChange={this.changeNum}/>
-        <Button type="primary" onClick={this.handleCreate}>Create</Button>
+        <Button type="primary" onClick={(e) => this.handleCreate(e)}>Create</Button>
       </div>
     );
     return (
       <Card title={this.props.title} bordered={false} style={vmCard}>
         <img src={goldImage}/>
         <div>
-          <Popover content={content} title="Title" trigger="click">
+          <Popover content={content} title="How many?" trigger="click">
             <Button type="primary" size="large">Create Instances</Button>
           </Popover>
         </div>
