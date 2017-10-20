@@ -7,7 +7,8 @@ import {
   Badge,
   Menu,
   Dropdown,
-  Button
+  Button,
+  Modal
 } from 'antd';
 import {cardStyles, vmCard} from '../../theme/styles';
 import {Link} from "react-router-dom";
@@ -17,7 +18,9 @@ import {getBlueprint, getAllVDI} from '../server/Blueprint';
 import GoldCard from '../Cards/GoldCard';
 import CloneCard from '../Cards/CloneCard';
 import CredentialsModal from './CredentialsModal';
-//var q = require(q);
+import Q from 'q';
+
+var confirm = Modal.confirm;
 
 class AdminConsole extends Component {
   constructor() {
@@ -28,6 +31,9 @@ class AdminConsole extends Component {
       vms: null,
       credentials: false
     }
+    this.refreshVMS = this
+      .refreshVMS
+      .bind(this);
   }
 
   componentDidMount() {
@@ -38,30 +44,27 @@ class AdminConsole extends Component {
       console.log(response.description);
       if (!response.credentials) 
         that.getCredentials();
-      getAllVDI()
-        .then(function (response) {
-          that.setState({vms: response});
-        });
+      that.refreshVMS();
     }).catch(error => {
       console.log(error);
       return '';
     });
   }
-
+  refreshVMS() {
+    var that = this;
+    getAllVDI().then(function (response) {
+      that.setState({vms: response});
+    });
+  }
   getCredentials() {
     this.setState({credentials: true});
-  }
-
-  getVMS() {
-    /**/
-    console.log('worked');
   }
 
   render() {
     const cols = [];
     cols.push(
       <Col span={6}>
-        <GoldCard title={this.state.cardTitle} func={this.getVMS}/>
+        <GoldCard title={this.state.cardTitle} refreshVMS={this.refreshVMS}/>
       </Col>
     );
     if (this.state.cardTitle && this.state.vms) {
@@ -74,7 +77,8 @@ class AdminConsole extends Component {
               title={vms[i].name}
               status={vms[i].status}
               vmID={vms[i].id}
-              user={vms[i].assigned_user}/>
+              user={vms[i].assigned_user}
+              refreshVMS={this.refreshVMS}/>
           </Col>
         );
       }

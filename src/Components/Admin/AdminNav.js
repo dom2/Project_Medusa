@@ -5,6 +5,7 @@ import {Route, Link, Switch} from "react-router-dom";
 import UManagement from './UserManagement';
 import {Layout, Menu} from 'antd';
 import {contentStyles, medusa, headStyles} from '../../theme/styles';
+import {logout} from '../server/LoginRegister';
 
 const {Header, Content} = Layout;
 
@@ -18,6 +19,10 @@ class AdminNav extends Component {
 
   handleClick = (e) => {
     this.setState({current: e.key});
+  }
+
+  endSession() {
+    logout();
   }
 
   render() {
@@ -43,12 +48,15 @@ class AdminNav extends Component {
             </Menu.Item>
           </Menu>
           <Menu
+            onClick={this.endSession}
             mode="horizontal"
             style={{
             lineHeight: '62px',
             float: 'right'
           }}>
-            <Menu.Item key="1">Logout</Menu.Item>
+            <Menu.Item key="1">
+              <Link to="/Login">Logout</Link>
+            </Menu.Item>
           </Menu>
         </Header>
         <Content style={contentStyles}>

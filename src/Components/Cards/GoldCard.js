@@ -11,7 +11,7 @@ import {
 import {cardStyles, vmCard} from '../../theme/styles';
 import {Link} from "react-router-dom";
 import goldImage from '../../theme/images/gold_image.png';
-import {cloneBlueprint} from '../server/Blueprint';
+import {cloneBlueprint, getAllVDI} from '../server/Blueprint';
 
 class GoldCard extends Component {
 
@@ -27,7 +27,9 @@ class GoldCard extends Component {
     console.log(this.state.clones);
     cloneBlueprint(this.state.clones).then(function (r) {
       if (r === 'CREATED') {
-        that.props.func;
+        that
+          .props
+          .refreshVMS();
       }
     });
   }
@@ -46,7 +48,9 @@ class GoldCard extends Component {
     return (
       <Card title={this.props.title} bordered={false} style={vmCard}>
         <img src={goldImage}/>
-        <div>
+        <div style={{
+          padding: "12px 0 4px"
+        }}>
           <Popover content={content} title="How many?" trigger="click">
             <Button type="primary" size="large">Create Instances</Button>
           </Popover>

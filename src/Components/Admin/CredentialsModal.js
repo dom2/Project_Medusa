@@ -12,8 +12,9 @@ class CredModal extends Component {
     }
   }
 
-  componentDidMount() {
+  componentWillReceiveProps() {
     this.setState({credentials: this.props.credentials});
+    console.log('cred ' + this.props.credentials);
   }
 
   handleSubmit = (e) => {
@@ -23,7 +24,7 @@ class CredModal extends Component {
       .form
       .validateFields((err, values) => {
         if (!err) {
-          setCredentials("id", values.userName, values.password).then(a => {
+          setCredentials(values.userName, values.password).then(a => {
             console.log(a);
             if (a) 
               this.setState({credentials: false});
@@ -36,15 +37,11 @@ class CredModal extends Component {
     const {getFieldDecorator} = this.props.form;
     return (
       <Modal
-        title="Gold Image RDP Credentials Needed"
+        title="RDP Credentials Needed"
         visible={this.state.credentials}
         closable={false}
         footer={null}>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-
-        <Form onSubmit={this.handleSubmit} className="login-form">
+        <Form onSubmit={this.handleSubmit} className="cred-form">
           <FormItem>
             {getFieldDecorator('userName', {
               rules: [
@@ -74,7 +71,9 @@ class CredModal extends Component {
                 placeholder="Password"/>
             )}
           </FormItem>
-          <FormItem>
+          <FormItem style={{
+            float: 'right'
+          }}>
             <Button type="primary" htmlType="submit" className="login-form-button">
               Save
             </Button>

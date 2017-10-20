@@ -22,3 +22,7 @@ export async function checkLogin(user, pass) {
       return false;
     });
 }
+
+export async function logout() {
+  sessionStorage.removeItem("lToken");
+}

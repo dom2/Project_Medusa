@@ -116,9 +116,9 @@ export async function startStopVM(id, action) {
     return "logout";
   }
 
-export async function setCredentials(id, user, pass) {
+export async function setCredentials(user, pass) {
   if (lToken) {
-    var vdi = url + "user/" + id;
+    var vdi = url + "blueprint";
     var auth = {
       headers: {
         "Authorization": lToken

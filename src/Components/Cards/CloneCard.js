@@ -12,13 +12,18 @@ import {
 import {cardStyles, vmCard} from '../../theme/styles';
 import {Link} from "react-router-dom";
 import {startStopVM, getVDIToken} from '../server/Blueprint';
-import vmImage from '../../theme/images/vm.png';
+import vmImageH from '../../theme/images/vm.png';
+import vmImage from '../../theme/images/vmg.png';
+//import ClientWindow from '../Client/clientWindow';
 
 class CloneCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      status: ""
+      status: "",
+      imgSrc: vmImage,
+      vmToken: "",
+      popOpen: false
     };
   }
 
@@ -34,13 +39,24 @@ class CloneCard extends Component {
 
   clicked = (e) => {
     startStopVM(this.props.vmID, e.key);
+    this
+      .props
+      .refreshVMS();
   }
 
   launchVM(vmID) {
-    getVDIToken(vmID)
-      .then(function (response) {
-        console.log(response);
-      });
+    var that = this;
+    getVDIToken(vmID).then(function (response) {
+      that.setState({vmToken: response.token});
+      that.setState({popOpen: true});
+    });
+  }
+  handleMouseOver = (e) => {
+    this.setState({imgSrc: vmImageH});
+  }
+
+  handleMouseOut = (e) => {
+    this.setState({imgSrc: vmImage});
   }
 
   render() {
@@ -60,18 +76,18 @@ class CloneCard extends Component {
     return (
       <Card title={this.props.title} bordered={false} style={vmCard}>
         <img
-          src={vmImage}
+          onMouseOver={(e) => this.handleMouseOver(e)}
+          onMouseOut={(e) => this.handleMouseOut(e)}
+          src={this.state.imgSrc}
           onClick={() => {
           this.launchVM(this.props.vmID)
         }}/>
         <br/>
         <div>
-          <Badge
-            status={this.state.status}
-            text={this.props.status}
-            style={{
-            marginRight: '10px'
-          }}/>
+          <Badge status={this.state.status} text={this.props.status}/>
+          <span style={{
+            padding: '0 5px'
+          }}></span>
           <Dropdown overlay={vMenu}>
             <a className="ant-dropdown-link" href="#">
               Actions
@@ -83,6 +99,7 @@ class CloneCard extends Component {
           </div>
         </div>
       </Card>
+
     );
   }
 }
