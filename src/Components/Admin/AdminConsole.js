@@ -41,7 +41,6 @@ class AdminConsole extends Component {
     getBlueprint().then(response => {
       if (response) 
         this.setState({cardTitle: response.description});
-      console.log(response.description);
       if (!response.credentials) 
         that.getCredentials();
       that.refreshVMS();
@@ -53,6 +52,7 @@ class AdminConsole extends Component {
   refreshVMS() {
     var that = this;
     getAllVDI().then(function (response) {
+      console.log(response);
       that.setState({vms: response});
     });
   }

@@ -83,6 +83,7 @@ export async function getVDIToken(id) {
       .get(vdi, auth)
       .then(function (response) {
         console.log(response.data);
+        localStorage.setItem("vmToken", response.data.token);
         return response.data;
       })
       .catch(function (error) {

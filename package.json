@@ -8,6 +8,7 @@
         "axios": "^0.16.2",
         "basic-auth-token": "^0.4.2",
         "password-generator": "^2.2.0",
+        "popup-window": "^1.0.1",
         "q": "^1.5.1",
         "react": "^15.6.1",
         "react-dom": "^15.6.1",

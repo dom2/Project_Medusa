@@ -59,22 +59,37 @@ const data = [
 ];
 
 class UserConsole extends Component {
-
-  render() {
-    return (
-      <div>
-        <Button
-          type="danger"
-          icon="plus"
-          size='large'
-          ghost
-          style={{
-          marginBottom: '20px'
-        }}>Create User</Button>
-        <Table columns={columns} dataSource={data}/>
-      </div>
-    );
+  constructor(props) {
+    super(props);
+    this.state = {
+      this.state.users: null
+    }
+    this.refreshVMS = this
+      .refreshVMS
+      .bind(this);
   }
-}
+  render() {
+    if (this.state.users) {
+      return (
+        <div>
+          <Button
+            type="danger"
+            icon="plus"
+            size='large'
+            ghost
+            style={{
+            marginBottom: '20px'
+          }}>Create User</Button>
+          <Table columns={columns} dataSource={users}/>
+        </div>
+      );
+    } else 
+      return (
+        <Button type="primary" size="large" loading>
+          Loading Users
+        </Button>
+      );
+    }
+  }
 
 export default UserConsole;

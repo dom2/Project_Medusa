@@ -14,7 +14,7 @@ import {Link} from "react-router-dom";
 import {startStopVM, getVDIToken} from '../server/Blueprint';
 import vmImageH from '../../theme/images/vm.png';
 import vmImage from '../../theme/images/vmg.png';
-//import ClientWindow from '../Client/clientWindow';
+import Popup from 'popup-window';
 
 class CloneCard extends Component {
   constructor(props) {
@@ -23,7 +23,8 @@ class CloneCard extends Component {
       status: "",
       imgSrc: vmImage,
       vmToken: "",
-      popOpen: false
+      popOpen: false,
+      win: null
     };
   }
 
@@ -47,6 +48,22 @@ class CloneCard extends Component {
   launchVM(vmID) {
     var that = this;
     getVDIToken(vmID).then(function (response) {
+      console.log(response);
+      var message = {
+        token: response.token,
+        width: screen.width,
+        height: screen.height
+      };
+      window.open('http://129.146.85.80/, "width=" + screen.width + ",height=" + screen.height)
+.postMessage(message, window.location.href);
+      /*that.setState({
+        win: new Popup('http://129.146.85.80/?token=' + response.token, {
+          name: 'Guac',
+          width: screen.width,
+          height: screen.height
+        })
+      });
+      that.state.win.open();*/
       that.setState({vmToken: response.token});
       that.setState({popOpen: true});
     });
@@ -73,6 +90,7 @@ class CloneCard extends Component {
         </Menu.Item>
       </Menu>
     );
+
     return (
       <Card title={this.props.title} bordered={false} style={vmCard}>
         <img
@@ -99,7 +117,6 @@ class CloneCard extends Component {
           </div>
         </div>
       </Card>
-
     );
   }
 }

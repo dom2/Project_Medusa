@@ -23,6 +23,29 @@ export async function checkLogin(user, pass) {
     });
 }
 
+export async function register(user, pass, rUser, rPass) {
+  var link = url + "register";
+  var auth = {
+    headers: {
+      "Authorization": sessionStorage.getItem("lToken")
+    }
+  }
+  return axios.post(link, {
+    username: user,
+    password: pass,
+    ravello_username: rUser,
+    ravello_password: rPass
+  }, auth)
+    .then(function (response) {
+      console.log(response.data);
+      return response.data;
+    })
+    .catch(function (error) {
+      console.log(error);
+      return false;
+    });
+}
+
 export async function logout() {
   sessionStorage.removeItem("lToken");
 }
