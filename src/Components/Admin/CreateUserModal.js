@@ -1,20 +1,21 @@
 import React, {Component} from 'react';
 import logo from '../../theme/images/logo.png';
 import {Form, Icon, Input, Button, Modal} from 'antd';
-import {setCredentials} from '../server/Blueprint';
+import {createUser} from '../server/UserAdmin';
 const FormItem = Form.Item;
+
+var generatePassword = require('password-generator');
 
 class CreateUserForm extends Component {
   constructor() {
     super();
     this.state = {
-      credentials: false
+      open: false
     }
   }
 
   componentWillReceiveProps() {
-    this.setState({credentials: this.props.credentials});
-    console.log('cred ' + this.props.credentials);
+    this.setState({open: this.props.open});
   }
 
   handleSubmit = (e) => {
@@ -24,10 +25,10 @@ class CreateUserForm extends Component {
       .form
       .validateFields((err, values) => {
         if (!err) {
-          setCredentials(values.userName, values.password).then(a => {
+          createUser(values.userName, values.password, values.email).then(a => {
             console.log(a);
             if (a) 
-              this.setState({credentials: false});
+              this.setState({open: false});
             }
           );
         }
@@ -36,11 +37,7 @@ class CreateUserForm extends Component {
   render() {
     const {getFieldDecorator} = this.props.form;
     return (
-      <Modal
-        title="New User"
-        visible={this.state.credentials}
-        closable={false}
-        footer={null}>
+      <Modal title="New User" visible={this.state.open} footer={null}>
         <Form onSubmit={this.handleSubmit} className="cred-form">
           <FormItem>
             {getFieldDecorator('userName', {
@@ -57,20 +54,34 @@ class CreateUserForm extends Component {
             )}
           </FormItem>
           <FormItem>
-            {getFieldDecorator('password', {
+            {getFieldDecorator('email', {
               rules: [
                 {
                   required: true,
-                  message: 'Please input your Password!'
+                  message: 'Please input an email!'
+                }
+              ]
+            })(
+              <Input
+                prefix={< Icon type = "mail" style = {{ fontSize: 13 }}/>}
+                placeholder="Email"/>
+            )}
+          </FormItem>
+          <FormItem>
+            {getFieldDecorator('password', {
+              rules: [
+                {
+                  required: true
                 }
               ]
             })(
               <Input
                 prefix={< Icon type = "lock" style = {{ fontSize: 13 }}/>}
-                type="password"
-                placeholder="Password"/>
+                disabled
+                value={generatePassword(12, false)}/>
             )}
           </FormItem>
+
           <FormItem style={{
             float: 'right'
           }}>

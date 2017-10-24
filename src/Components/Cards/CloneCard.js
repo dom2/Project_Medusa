@@ -51,11 +51,12 @@ class CloneCard extends Component {
       console.log(response);
       var message = {
         token: response.token,
-        width: screen.width,
-        height: screen.height
+        width: window.screen.width,
+        height: window.screen.height
       };
-      window.open('http://129.146.85.80/, "width=" + screen.width + ",height=" + screen.height)
-.postMessage(message, window.location.href);
+      window
+        .open('http://129.146.85.80/', "width=" + window.screen.width + ",height=" + window.screen.height)
+        .postMessage(message, window.location.href);
       /*that.setState({
         win: new Popup('http://129.146.85.80/?token=' + response.token, {
           name: 'Guac',
