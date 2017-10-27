@@ -1,35 +1,11 @@
 import React, {Component} from 'react';
-import {Button, Table, Icon} from 'antd';
+import {Button, Table, Icon, Modal} from 'antd';
 import {cardStyles, vmCard} from '../../theme/styles';
 import {Link} from "react-router-dom";
 import CreateUserModal from './CreateUserModal';
 import {getAllUsers, assignVM, createUser} from "../server/UserAdmin";
 
-const columns = [
-  {
-    title: 'Username',
-    dataIndex: 'username',
-    key: 'username',
-    render: text => <a href="#">{text}</a>
-  }, {
-    title: 'Email',
-    dataIndex: 'email',
-    key: 'email'
-  }, {
-    title: 'Action',
-    key: 'action',
-    render: (text, record) => (
-      <span>
-        <a href="#">Delete</a>
-        <span className="ant-divider">
-          /
-        </span>
-        <a href="#">
-          Associate VM</a>
-      </span>
-    )
-  }
-];
+const confirm = Modal.confirm;
 
 const data = [
   {
@@ -59,6 +35,22 @@ class UserConsole extends Component {
     }
   }
 
+  showDeleteConfirm(uname, uid) {
+    confirm({
+      title: 'Are you sure delete this User?',
+      content: 'Are you sure you want to delete ' + uname + '?',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        console.log('OK');
+      },
+      onCancel() {
+        console.log('Cancel');
+      }
+    });
+  }
+
   componentDidMount() {
     var that = this;
     getAllUsers().then(response => {
@@ -72,7 +64,33 @@ class UserConsole extends Component {
   }
 
   render() {
-    if (true) {
+    const columns = [
+      {
+        title: 'Username',
+        dataIndex: 'username',
+        key: 'username',
+        render: text => <a href="#">{text}</a>
+      }, {
+        title: 'Email',
+        dataIndex: 'email',
+        key: 'email'
+      }, {
+        title: 'Actions',
+        key: 'action',
+        render: (text, record) => (
+          <span>
+            <a onClick={this.showDeleteConfirm(record.username, record.key)}>Delete</a>
+            <span className="ant-divider">
+              /
+            </span>
+            <a onClick={this.showDeleteConfirm(record.username, record.key)}>
+              Associate VM</a>
+          </span>
+        )
+      }
+    ];
+
+    if (this.state.users) {
       return (
         <div>
           <Button

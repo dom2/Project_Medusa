@@ -42,7 +42,11 @@ class AdminConsole extends Component {
       if (response) 
         this.setState({cardTitle: response.description});
       if (!response.credentials) 
-        that.getCredentials();
+        that.getCredentials().then(a => {
+          if (a === 'OK') {
+            this.setState({credentials: false});
+          }
+        });
       that.refreshVMS();
     }).catch(error => {
       console.log(error);
@@ -58,6 +62,7 @@ class AdminConsole extends Component {
   }
   getCredentials() {
     this.setState({credentials: true});
+
   }
 
   render() {
@@ -89,9 +94,15 @@ class AdminConsole extends Component {
           </Row>
           <CredentialsModal credentials={this.state.credentials}/>
         </div>
-
       );
     } else if (this.state.cardTitle) {
+      cols.push(
+        <Col span={6}>
+          <Button type="primary" size="large" loading>
+            Looking for Instances
+          </Button>
+        </Col>
+      );
       return (
         <div>
           <Row gutter={12}>

@@ -14,8 +14,10 @@ import {
 } from 'antd';
 import Login from './Register';
 import AdminConsole from '../Admin/AdminConsole';
+import {register} from '../server/LoginRegister';
+
 import {cardStyles, contentStyles, medusa, headStyles} from '../../theme/styles';
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 
 const {Header, Content} = Layout;
 const FormItem = Form.Item;
@@ -24,7 +26,7 @@ class RegisterForm extends Component {
   constructor() {
     super();
     this.state = {
-      adminRedirect: false
+      registered: false
     }
   }
   handleSubmit = (e) => {
@@ -34,13 +36,25 @@ class RegisterForm extends Component {
       .form
       .validateFields((err, values) => {
         if (!err) {
-          console.log('Received values of form: ', values);
+          register(values.userName, values.password, values.rUserName, values.rPassword).then(a => {
+            if (a === 'OK') {
+              this.setState({registered: true});
+            }
+          });
         }
       });
   }
   checkPassword = (rule, value, callback) => {
     const form = this.props.form;
     if (value && value !== form.getFieldValue('password')) {
+      callback('Two passwords that you enter is inconsistent!');
+    } else {
+      callback();
+    }
+  }
+  checkRPassword = (rule, value, callback) => {
+    const form = this.props.form;
+    if (value && value !== form.getFieldValue('rPassword')) {
       callback('Two passwords that you enter is inconsistent!');
     } else {
       callback();
@@ -138,13 +152,13 @@ class RegisterForm extends Component {
                     )}
                   </FormItem>
                   <FormItem hasFeedback>
-                    {getFieldDecorator('confirm', {
+                    {getFieldDecorator('rConfirm', {
                       rules: [
                         {
                           required: true,
                           message: 'Please confirm your Ravello password!'
                         }, {
-                          validator: this.checkPassword
+                          validator: this.checkRPassword
                         }
                       ]
                     })(
@@ -169,6 +183,7 @@ class RegisterForm extends Component {
               </Card>
             </Col>
           </Row>
+          {this.state.registered && (<Redirect to='/Login'/>)}
         </Content>
       </Layout>
     );

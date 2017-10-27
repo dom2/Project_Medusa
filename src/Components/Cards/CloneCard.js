@@ -7,11 +7,12 @@ import {
   Button,
   Col,
   Row,
-  Menu
+  Menu,
+  message
 } from 'antd';
 import {cardStyles, vmCard} from '../../theme/styles';
 import {Link} from "react-router-dom";
-import {startStopVM, getVDIToken} from '../server/Blueprint';
+import {startStopVM, getVDIToken, destroyVM} from '../server/Blueprint';
 import vmImageH from '../../theme/images/vm.png';
 import vmImage from '../../theme/images/vmg.png';
 import Popup from 'popup-window';
@@ -39,34 +40,48 @@ class CloneCard extends Component {
   }
 
   clicked = (e) => {
-    startStopVM(this.props.vmID, e.key);
-    this
-      .props
-      .refreshVMS();
+    if (e.key === "delete") 
+      destroyVM;
+    else 
+      startStopVM(this.props.vmID, e.key);
+    message.loading('Updating VM', 5, this.props.refreshVMS());
+
   }
 
   launchVM(vmID) {
     var that = this;
     getVDIToken(vmID).then(function (response) {
-      console.log(response);
-      var message = {
-        token: response.token,
-        width: window.screen.width,
-        height: window.screen.height
-      };
-      window
-        .open('http://129.146.85.80/', "width=" + window.screen.width + ",height=" + window.screen.height)
-        .postMessage(message, window.location.href);
-      /*that.setState({
-        win: new Popup('http://129.146.85.80/?token=' + response.token, {
-          name: 'Guac',
-          width: screen.width,
-          height: screen.height
-        })
-      });
-      that.state.win.open();*/
-      that.setState({vmToken: response.token});
-      that.setState({popOpen: true});
+      if (response !== "Something went wrong.") {
+        var w = window.screen.width * 0.89;
+        var h = window.screen.height * 0.91;
+        var message = {
+          token: response.token,
+          width: w,
+          height: h
+        };
+
+        var newWindow = window.open("http://129.146.85.80/", "_blank", "toolbar=no, menubar=no,scrollbars=yes,resizable=yes,width=" + window.screen.width + ",height=" + window.screen.height);
+        var intervalID = setInterval(function () {
+          newWindow.postMessage(message, "*");
+        }, 1000);
+
+        //listen to holla back
+        window.addEventListener('message', function (event) {
+          if (event.data) 
+            console.log('that shit worked.');
+          }
+        , false);
+        /*that.setState({
+          win: new Popup('http://129.146.85.80/?token=' + response.token, {
+            name: 'Guac',
+            width: screen.width,
+            height: screen.height
+          })
+        });
+        that.state.win.open();*/
+        that.setState({vmToken: response.token});
+        that.setState({popOpen: true});
+      }
     });
   }
   handleMouseOver = (e) => {
@@ -86,7 +101,7 @@ class CloneCard extends Component {
         <Menu.Item key="stop">
           Stop
         </Menu.Item>
-        <Menu.Item key="poop">
+        <Menu.Item key="delete">
           Destroy
         </Menu.Item>
       </Menu>

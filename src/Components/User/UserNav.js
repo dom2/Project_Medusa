@@ -13,6 +13,18 @@ class UserNav extends Component {
         <Header style={headStyles}>
           <img src={logo} alt="" style={medusa}/>
           <Menu
+            theme="light"
+            mode="horizontal"
+            selectedKeys="1"
+            style={{
+            lineHeight: '62px',
+            float: 'left',
+            color: '#DEE0E0'
+          }}>
+            <Menu.Item key="1">User Console</Menu.Item>
+          </Menu>
+
+          <Menu
             mode="horizontal"
             style={{
             lineHeight: '62px',

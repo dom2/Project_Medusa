@@ -69,6 +69,7 @@ class CreateUserForm extends Component {
           </FormItem>
           <FormItem>
             {getFieldDecorator('password', {
+              initialValue: generatePassword(12, false),
               rules: [
                 {
                   required: true
@@ -77,8 +78,12 @@ class CreateUserForm extends Component {
             })(
               <Input
                 prefix={< Icon type = "lock" style = {{ fontSize: 13 }}/>}
-                disabled
-                value={generatePassword(12, false)}/>
+                addonAfter={< Icon type = "copy" onClick = {
+                (e) => {
+                  console.log('copied')
+                }
+              } />}
+                disabled/>
             )}
           </FormItem>
 

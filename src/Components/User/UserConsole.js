@@ -7,78 +7,73 @@ import {
   Badge,
   Menu,
   Dropdown,
-  Button
+  Button,
+  Modal
 } from 'antd';
 import {cardStyles, vmCard} from '../../theme/styles';
 import {Link} from "react-router-dom";
-import goldImage from '../../theme/images/gold_image.png';
 import vmImage from '../../theme/images/vm.png';
+import {getUserVDI} from '../server/Blueprint';
+import CloneCard from '../Cards/CloneCard';
+import Q from 'q';
 
-const vMenu = (
-  <Menu>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="">Start</a>
-    </Menu.Item>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="">Stop</a>
-    </Menu.Item>
-  </Menu>
-);
+var confirm = Modal.confirm;
 
 class UserConsole extends Component {
+  constructor() {
+    super();
+    this.state = {
+      colCount: 0,
+      vms: null
+    }
+    this.refreshVMS = this
+      .refreshVMS
+      .bind(this);
+  }
+
+  componentDidMount() {
+    this.refreshVMS();
+  }
+  refreshVMS() {
+    var that = this;
+    getUserVDI().then(function (response) {
+      console.log(response);
+      that.setState({vms: response});
+    });
+  }
 
   render() {
-    return (
-      <Row gutter={12}>
-        <Col span={6}>
-          <Card title="VM1" bordered={false} style={vmCard}>
-            <img src={vmImage}/>
-            <br/>
-            <div>
-              <Badge status="success" text="Running"/>
-              <Dropdown overlay={vMenu}>
-                <a className="ant-dropdown-link" href="#">
-                  Actions
-                  <Icon type="down"/>
-                </a>
-              </Dropdown>
-            </div>
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card title="VM2" bordered={false} style={vmCard}>
-            <img src={vmImage}/>
-            <br/>
-            <div>
-              <Badge status="warning" text="Paused"/>
-              <Dropdown overlay={vMenu}>
-                <a className="ant-dropdown-link" href="#">
-                  Actions
-                  <Icon type="down"/>
-                </a>
-              </Dropdown>
-            </div>
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card title="VM3" bordered={false} style={vmCard}>
-            <img src={vmImage}/>
-            <br/>
+    const cols = [];
 
-            <div>
-              <Badge status="error" text="Stopped"/>
-              <Dropdown overlay={vMenu}>
-                <a className="ant-dropdown-link" href="#">
-                  Actions
-                  <Icon type="down"/>
-                </a>
-              </Dropdown>
-            </div>
-          </Card>
-        </Col>
-      </Row>
-    );
+    if (this.state.vms) {
+      var vms = this.state.vms;
+      for (var i = 0; i < vms.length; i++) {
+        console.log(vms[i]);
+        cols.push(
+          <Col span={6}>
+            <CloneCard
+              title={vms[i].name}
+              status={vms[i].status}
+              vmID={vms[i].id}
+              user={vms[i].assigned_user}
+              refreshVMS={this.refreshVMS}/>
+          </Col>
+        );
+      }
+      return (
+        <div>
+          <Row gutter={12}>
+            {cols}
+          </Row>
+        </div>
+      );
+    } else 
+      return (
+        <Button type="primary" size="large" loading>
+          Loading VMs
+        </Button>
+      );
+    }
   }
-}
 
 export default UserConsole;

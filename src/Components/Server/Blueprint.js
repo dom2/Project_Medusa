@@ -94,6 +94,29 @@ export async function getVDIToken(id) {
     return "logout";
   }
 
+export async function destroyVM(id) {
+  if (lToken) {
+    var vdi = url + "vdi/" + id;
+    var auth = {
+      headers: {
+        "Authorization": lToken
+      }
+    }
+    return axios
+      .delete(vdi, auth)
+      .then(function (response) {
+        console.log(response.data);
+        localStorage.setItem("vmToken", response.data.token);
+        return response.data;
+      })
+      .catch(function (error) {
+        console.log(error);
+        return "Something went wrong.";
+      });
+  } else 
+    return "logout";
+  }
+
 export async function startStopVM(id, action) {
   if (lToken) {
     var vdi = url + "vdi/" + id;
@@ -136,6 +159,28 @@ export async function setCredentials(user, pass) {
       .catch(function (error) {
         console.log(error);
         return 'false';
+      });
+  } else 
+    return "logout";
+  }
+
+export async function getUserVDI() {
+  if (lToken) {
+    var vdi = url + "token";
+    var auth = {
+      headers: {
+        "Authorization": lToken
+      }
+    }
+    return axios
+      .get(vdi, auth)
+      .then(function (response) {
+        console.log(response.data);
+        return response.data;
+      })
+      .catch(function (error) {
+        console.log(error);
+        return "Something went wrong.";
       });
   } else 
     return "logout";

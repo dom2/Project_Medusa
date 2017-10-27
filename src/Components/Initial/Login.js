@@ -24,7 +24,8 @@ class LoginForm extends Component {
   constructor() {
     super();
     this.state = {
-      adminRedirect: false
+      adminRedirect: false,
+      userRedirect: false
     }
   }
   handleSubmit = (e) => {
@@ -36,11 +37,10 @@ class LoginForm extends Component {
         if (!err) {
           console.log('Received values of form: ', values);
           checkLogin(values.userName, values.password).then(a => {
-            console.log(a);
             if (a === 'Admin') {
               this.setState({adminRedirect: true});
-            } else 
-              console.log(a);
+            } else if (a === 'User') 
+              this.setState({userRedirect: true});
             }
           );
         }
@@ -111,6 +111,7 @@ class LoginForm extends Component {
             </Col>
           </Row>
           {this.state.adminRedirect && (<Redirect to='/AdminNav'/>)}
+          {this.state.userRedirect && (<Redirect to='/UserNav'/>)}
         </Content>
       </Layout>
     );
