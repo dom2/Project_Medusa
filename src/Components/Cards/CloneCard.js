@@ -39,21 +39,12 @@ class CloneCard extends Component {
     }
   }
 
-  clicked = (e) => {
-    if (e.key === "delete") 
-      destroyVM;
-    else 
-      startStopVM(this.props.vmID, e.key);
-    message.loading('Updating VM', 5, this.props.refreshVMS());
-
-  }
-
   launchVM(vmID) {
     var that = this;
     getVDIToken(vmID).then(function (response) {
       if (response !== "Something went wrong.") {
-        var w = window.screen.width * 0.89;
-        var h = window.screen.height * 0.91;
+        var w = window.screen.availWidth;
+        var h = window.screen.availHeight;
         var message = {
           token: response.token,
           width: w,
@@ -91,7 +82,21 @@ class CloneCard extends Component {
   handleMouseOut = (e) => {
     this.setState({imgSrc: vmImage});
   }
+  clicked = (e) => {
+    var that = this;
+    if (e.key === "delete") {
+      destroyVM(this.props.vmID);
+    } else {
+      startStopVM(this.props.vmID, e.key);
+    }
+    message.loading('Updating VM', 15, this.props.refreshVMS());
+    window.setTimeout(function () {
+      that
+        .props
+        .refreshVMS();
+    }, 7000);
 
+  }
   render() {
     const vMenu = (
       <Menu onClick={this.clicked}>

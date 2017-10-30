@@ -8,7 +8,8 @@ import {
   Menu,
   Dropdown,
   Button,
-  Modal
+  Modal,
+  message
 } from 'antd';
 import {cardStyles, vmCard} from '../../theme/styles';
 import {Link} from "react-router-dom";
@@ -62,7 +63,10 @@ class AdminConsole extends Component {
   }
   getCredentials() {
     this.setState({credentials: true});
+  }
 
+  noInstances() {
+    message.info('No Instances found.', 3);
   }
 
   render() {
@@ -95,9 +99,28 @@ class AdminConsole extends Component {
           <CredentialsModal credentials={this.state.credentials}/>
         </div>
       );
+    } else if (this.state.cardTitle && this.state.vms === {}) {
+      this.noInstances();
+      return (
+        <div>
+          <Row gutter={12}>
+            {cols}
+          </Row>
+          <CredentialsModal credentials={this.state.credentials}/>
+        </div>
+      )
+    } else if (this.state.cardTitle && this.state.vms) {
+      return (
+        <div>
+          <Row gutter={12}>
+            {cols}
+          </Row>
+          <CredentialsModal credentials={this.state.credentials}/>
+        </div>
+      );
     } else if (this.state.cardTitle) {
       cols.push(
-        <Col span={6}>
+        <Col span={8}>
           <Button type="primary" size="large" loading>
             Looking for Instances
           </Button>

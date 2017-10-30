@@ -6,7 +6,8 @@ import {
   Dropdown,
   Button,
   Popover,
-  InputNumber
+  InputNumber,
+  message
 } from 'antd';
 import {cardStyles, vmCard} from '../../theme/styles';
 import {Link} from "react-router-dom";
@@ -27,6 +28,7 @@ class GoldCard extends Component {
     console.log(this.state.clones);
     cloneBlueprint(this.state.clones).then(function (r) {
       if (r === 'CREATED') {
+        message.loading('Updating VM', 10, that.props.refreshVMS());
         that
           .props
           .refreshVMS();

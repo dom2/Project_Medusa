@@ -1,30 +1,46 @@
 import React, {Component} from 'react';
-import {Button, Table, Icon, Modal} from 'antd';
+import {
+  Button,
+  Table,
+  Icon,
+  Modal,
+  Popover,
+  Select
+} from 'antd';
 import {cardStyles, vmCard} from '../../theme/styles';
 import {Link} from "react-router-dom";
 import CreateUserModal from './CreateUserModal';
 import {getAllUsers, assignVM, createUser} from "../server/UserAdmin";
 
 const confirm = Modal.confirm;
+const Option = Select.Option;
+
+const children = [];
+for (let i = 10; i < 36; i++) {
+  children.push(
+    <Option key={i.toString(36) + i}>{"VDI_" + i}</Option>
+  );
+}
 
 const data = [
   {
     key: '1',
-    username: 'jbrown',
-    email: 'jbrown@oracle.com',
-    password: '********'
-  }, {
-    key: '2',
-    username: 'jgreen',
-    email: 'jgreen@oracle.com',
-    password: '********'
-  }, {
-    key: '3',
-    username: 'jblack',
-    email: 'jblack@oracle.com',
-    password: '********'
+    username: 'none',
+    email: 'none'
   }
 ];
+
+const content = (
+  <Select
+    mode="multiple"
+    style={{
+    width: '100%'
+  }}
+    placeholder="Please select"
+    defaultValue={['a10', 'c12']}>
+    {children}
+  </Select>
+);
 
 class UserConsole extends Component {
   constructor(props) {
@@ -52,12 +68,16 @@ class UserConsole extends Component {
   }
 
   componentDidMount() {
+    this.refreshTable();
+  }
+
+  refreshTable() {
     var that = this;
     getAllUsers().then(response => {
       if (response) 
-        this.setState({users: response});
-      }
-    ).catch(error => {
+        console.log(that);
+      that.setState({users: response});
+    }).catch(error => {
       console.log(error);
       return '';
     });
@@ -79,17 +99,41 @@ class UserConsole extends Component {
         key: 'action',
         render: (text, record) => (
           <span>
-            <a onClick={this.showDeleteConfirm(record.username, record.key)}>Delete</a>
+            <a
+              onClick={(e) => {
+              this.showDeleteConfirm(record.username, record.key)
+            }}>Delete</a>
             <span className="ant-divider">
               /
             </span>
-            <a onClick={this.showDeleteConfirm(record.username, record.key)}>
-              Associate VM</a>
+
+            <Popover content={content} title="Title">
+              <a>Associate VM</a>
+            </Popover>
           </span>
         )
       }
     ];
 
+    if (this.state.users === []) {
+      return (
+        <div>
+          <Button
+            type="danger"
+            icon="plus"
+            size='large'
+            onClick={(e) => {
+            this.setState({cuOpen: true});
+          }}
+            ghost
+            style={{
+            marginBottom: '20px'
+          }}>Create User</Button >
+          <Table columns={columns} dataSource={data}/>
+          < CreateUserModal open={this.state.cuOpen} refresh={this.refreshTable}/>
+        </div>
+      );
+    }
     if (this.state.users) {
       return (
         <div>
@@ -105,7 +149,7 @@ class UserConsole extends Component {
             marginBottom: '20px'
           }}>Create User</Button>
           <Table columns={columns} dataSource={this.state.users}/>
-          <CreateUserModal open={this.state.cuOpen}/>
+          <CreateUserModal open={this.state.cuOpen} refresh={this.refreshTable}/>
         </div>
       );
     } else 

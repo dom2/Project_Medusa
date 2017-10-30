@@ -1,7 +1,14 @@
 import React, {Component} from 'react';
 import logo from '../../theme/images/logo.png';
-import {Form, Icon, Input, Button, Modal} from 'antd';
-import {createUser} from '../server/UserAdmin';
+import {
+  Form,
+  Icon,
+  Input,
+  Button,
+  Modal,
+  message
+} from 'antd';
+import {createUser, getAllUsers} from '../server/UserAdmin';
 const FormItem = Form.Item;
 
 var generatePassword = require('password-generator');
@@ -19,6 +26,7 @@ class CreateUserForm extends Component {
   }
 
   handleSubmit = (e) => {
+    var that = this;
     e.preventDefault();
     this
       .props
@@ -27,10 +35,14 @@ class CreateUserForm extends Component {
         if (!err) {
           createUser(values.userName, values.password, values.email).then(a => {
             console.log(a);
-            if (a) 
+            if (a) {
               this.setState({open: false});
+              message.loading('Updating Users', 5, function () {});
+              that
+                .props
+                .refresh();
             }
-          );
+          });
         }
       });
   }
