@@ -9,7 +9,7 @@ import {
 } from 'antd';
 import {cardStyles, vmCard} from '../../theme/styles';
 import {Link} from "react-router-dom";
-import CreateUserModal from './CreateUserModal';
+import CreateUserModal from './Modals/CreateUserModal';
 import {getAllUsers, assignVM, createUser} from "../server/UserAdmin";
 
 const confirm = Modal.confirm;

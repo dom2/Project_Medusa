@@ -10,23 +10,33 @@ import {
   Layout,
   Row,
   Col,
-  Menu
+  Menu,
+  Tabs,
+  Select,
+  Upload,
+  message
 } from 'antd';
 import Login from './Register';
 import AdminConsole from '../Admin/AdminConsole';
-import {register} from '../server/LoginRegister';
+import {registerRavello, registerOCI} from '../server/LoginRegister';
 
 import {cardStyles, contentStyles, medusa, headStyles} from '../../theme/styles';
-import {Link, Redirect} from "react-router-dom";
-
+import { Link, Redirect } from "react-router-dom";
+const TabPane = Tabs.TabPane;
+const Option = Select.Option;
+const { TextArea } = Input;
 const {Header, Content} = Layout;
 const FormItem = Form.Item;
+
+
 
 class RegisterForm extends Component {
   constructor() {
     super();
     this.state = {
-      registered: false
+      registered: false,
+      fileList: [],
+      file: null,
     }
   }
   handleSubmit = (e) => {
@@ -35,18 +45,43 @@ class RegisterForm extends Component {
       .props
       .form
       .validateFields((err, values) => {
-        if (!err) {
-          register(values.userName, values.password, values.rUserName, values.rPassword).then(a => {
+        //if (!err) {
+          if (this.state.file !== null) {
+            const { fileList } = this.state;
+            const formData = new FormData();
+            formData.append('username', values.userNameo);
+            formData.append('password', values.passwordo);
+            formData.append('user_ocid', values.userOcid);
+            formData.append('fingerprint', values.fingerprint);
+            formData.append('tenancy_ocid', values.tenancyOcid);
+            formData.append('region', values.region);
+            formData.append('file', this.state.file);
+            console.log(formData);
+            registerOCI(formData).then(a => {
+              if (a === 'OK') {
+                this.setState({ registered: true });
+              }
+            });
+          }
+          else registerRavello(values.userName, values.password, values.rUserName, values.rPassword).then(a => {
             if (a === 'OK') {
               this.setState({registered: true});
             }
           });
-        }
+       // }
       });
   }
-  checkPassword = (rule, value, callback) => {
+  checkOPassword = (rule, value, callback) => {
     const form = this.props.form;
     if (value && value !== form.getFieldValue('password')) {
+      callback('Two passwords that you enter is inconsistent!');
+    } else {
+      callback();
+    }
+  }
+  checkOPassword = (rule, value, callback) => {
+    const form = this.props.form;
+    if (value && value !== form.getFieldValue('passwordo')) {
       callback('Two passwords that you enter is inconsistent!');
     } else {
       callback();
@@ -60,8 +95,37 @@ class RegisterForm extends Component {
       callback();
     }
   }
+  
   render() {
-    const {getFieldDecorator} = this.props.form;
+    const { getFieldDecorator } = this.props.form;
+    const { uploading } = this.state;
+    const props = {
+      action: '//jsonplaceholder.typicode.com/posts/',
+      onRemove: (file) => {
+        this.setState(({ fileList }) => {
+          const index = fileList.indexOf(file);
+          const newFileList = fileList.slice();
+          newFileList.splice(index, 1);
+          return {
+            fileList: newFileList,
+          };
+        });
+      },
+      beforeUpload: (file) => {
+        console.log(file);
+        var ft = file.name.split('.')[1];
+        if (ft === 'pem') {
+          this.setState({ fileList: [] });
+          this.setState({ file: file });
+          this.setState(({ fileList }) => ({
+            fileList: [...fileList, file],
+          }));
+          return false;
+        }
+      },
+      fileList: this.state.fileList,
+    };
+
     return (
       <Layout>
         <Header style={headStyles}>
@@ -71,115 +135,262 @@ class RegisterForm extends Component {
           <Row>
             <Col span={6} offset={9}>
               <Card title="Register" bordered={false} style={cardStyles}>
+              <Tabs type="card">
+                <TabPane tab="Ravello" key="1">
                 <Form onSubmit={this.handleSubmit} className="register-form">
-                  <FormItem>
-                    {getFieldDecorator('userName', {
-                      rules: [
-                        {
-                          required: true,
-                          message: 'Please input your username!'
-                        }
-                      ]
-                    })(
-                      <Input
-                        prefix={< Icon type = "user" style = {{ fontSize: 13 }}/>}
-                        placeholder="Username"/>
-                    )}
-                  </FormItem>
-                  <FormItem hasFeedback>
-                    {getFieldDecorator('password', {
-                      rules: [
-                        {
-                          required: true,
-                          message: 'Please input your password!'
-                        }, {
-                          validator: this.checkConfirm
-                        }
-                      ]
-                    })(
-                      <Input
-                        prefix={< Icon type = "lock" style = {{ fontSize: 13 }}/>}
-                        type="password"
-                        placeholder="Password"/>
-                    )}
-                  </FormItem>
-                  <FormItem hasFeedback>
-                    {getFieldDecorator('confirm', {
-                      rules: [
-                        {
-                          required: true,
-                          message: 'Please confirm your password!'
-                        }, {
-                          validator: this.checkPassword
-                        }
-                      ]
-                    })(
-                      <Input
-                        prefix={< Icon type = "lock" style = {{ fontSize: 13 }}/>}
-                        type="password"
-                        placeholder="Confirm Password"/>
-                    )}
-                  </FormItem>
-                  <FormItem>
-                    {getFieldDecorator('rUserName', {
-                      rules: [
-                        {
-                          required: true,
-                          message: 'Please input your Ravello username!'
-                        }
-                      ]
-                    })(
-                      <Input
-                        prefix={< Icon type = "user" style = {{ fontSize: 13 }}/>}
-                        placeholder="Ravello Username"/>
-                    )}
-                  </FormItem>
-                  <FormItem hasFeedback>
-                    {getFieldDecorator('rPassword', {
-                      rules: [
-                        {
-                          required: true,
-                          message: 'Please input your Ravello password!'
-                        }, {
-                          validator: this.checkConfirm
-                        }
-                      ]
-                    })(
-                      <Input
-                        prefix={< Icon type = "lock" style = {{ fontSize: 13 }}/>}
-                        type="password"
-                        placeholder="Ravello Password"/>
-                    )}
-                  </FormItem>
-                  <FormItem hasFeedback>
-                    {getFieldDecorator('rConfirm', {
-                      rules: [
-                        {
-                          required: true,
-                          message: 'Please confirm your Ravello password!'
-                        }, {
-                          validator: this.checkRPassword
-                        }
-                      ]
-                    })(
-                      <Input
-                        prefix={< Icon type = "lock" style = {{ fontSize: 13 }}/>}
-                        type="password"
-                        placeholder="Confirm Ravello Password"/>
-                    )}
-                  </FormItem>
+                <FormItem>
+                  {getFieldDecorator('userName', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Please input your username!'
+                      }
+                    ]
+                  })(
+                    <Input
+                      prefix={< Icon type = "user" style = {{ fontSize: 13 }}/>}
+                      placeholder="Username"/>
+                  )}
+                </FormItem>
+                <FormItem hasFeedback>
+                  {getFieldDecorator('password', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Please input your password!'
+                      }, {
+                        validator: this.checkConfirm
+                      }
+                    ]
+                  })(
+                    <Input
+                      prefix={< Icon type = "lock" style = {{ fontSize: 13 }}/>}
+                      type="password"
+                      placeholder="Password"/>
+                  )}
+                </FormItem>
+                <FormItem hasFeedback>
+                  {getFieldDecorator('confirm', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Please confirm your password!'
+                      }, {
+                        validator: this.checkPassword
+                      }
+                    ]
+                  })(
+                    <Input
+                      prefix={< Icon type = "lock" style = {{ fontSize: 13 }}/>}
+                      type="password"
+                      placeholder="Confirm Password"/>
+                  )}
+                </FormItem>
+                <FormItem>
+                  {getFieldDecorator('rUserName', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Please input your Ravello username!'
+                      }
+                    ]
+                  })(
+                    <Input
+                      prefix={< Icon type = "user" style = {{ fontSize: 13 }}/>}
+                      placeholder="Ravello Username"/>
+                  )}
+                </FormItem>
+                <FormItem hasFeedback>
+                  {getFieldDecorator('rPassword', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Please input your Ravello password!'
+                      }, {
+                        validator: this.checkConfirm
+                      }
+                    ]
+                  })(
+                    <Input
+                      prefix={< Icon type = "lock" style = {{ fontSize: 13 }}/>}
+                      type="password"
+                      placeholder="Ravello Password"/>
+                  )}
+                </FormItem>
+                <FormItem hasFeedback>
+                  {getFieldDecorator('rConfirm', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Please confirm your Ravello password!'
+                      }, {
+                        validator: this.checkRPassword
+                      }
+                    ]
+                  })(
+                    <Input
+                      prefix={< Icon type = "lock" style = {{ fontSize: 13 }}/>}
+                      type="password"
+                      placeholder="Confirm Ravello Password"/>
+                  )}
+                </FormItem>
 
-                  <FormItem>
-                    <Button type="primary" htmlType="submit">Register</Button>
-                    <div>Or
-                      <Link
-                        style={{
-                        marginLeft: 5
-                      }}
-                        to="/Login">Login</Link>
-                    </div>
+                <FormItem>
+                  <Button type="primary" htmlType="submit">Register</Button>
+                  <div>Or
+                    <Link
+                      style={{
+                      marginLeft: 5
+                    }}
+                      to="/Login">Login</Link>
+                  </div>
+                </FormItem>
+              </Form>
+                </TabPane>
+                <TabPane tab="OCI" key="2">
+                <Form onSubmit={this.handleSubmit} className="register-form">
+                <FormItem>
+                  {getFieldDecorator('userNameo', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Please input your username!'
+                      }
+                    ]
+                  })(
+                    <Input
+                      prefix={< Icon type = "user" style = {{ fontSize: 13 }}/>}
+                      placeholder="Username"/>
+                  )}
+                </FormItem>
+                <FormItem hasFeedback>
+                  {getFieldDecorator('passwordo', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Please input your password!'
+                      }, {
+                        validator: this.checkConfirm
+                      }
+                    ]
+                  })(
+                    <Input
+                      prefix={< Icon type = "lock" style = {{ fontSize: 13 }}/>}
+                      type="password"
+                      placeholder="Password"/>
+                  )}
+                </FormItem>
+                <FormItem hasFeedback>
+                  {getFieldDecorator('confirmo', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Please confirm your password!'
+                      }, {
+                        validator: this.checkOPassword
+                      }
+                    ]
+                  })(
+                    <Input
+                      prefix={< Icon type = "lock" style = {{ fontSize: 13 }}/>}
+                      type="password"
+                      placeholder="Confirm Password"/>
+                  )}
+                </FormItem>
+                <FormItem>
+                  {getFieldDecorator('userOcid', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Please input your User OCID!'
+                      }
+                    ]
+                  })(
+                    <TextArea placeholder="User OCID" rows={3} />
+                  )}
+                </FormItem>
+                <FormItem hasFeedback>
+                  {getFieldDecorator('fingerprint', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Please input your fingerprint!'
+                      }, {
+                        validator: this.checkConfirm
+                      }
+                    ]
+                  })(
+                    <TextArea placeholder="Fingerprint" rows={2} />
+                  )}
+                </FormItem>
+                <FormItem hasFeedback>
+                  {getFieldDecorator('tenancyOcid', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Please input your User OCID!'
+                      }, {
+                        validator: this.checkConfirm
+                      }
+                    ]
+                  })(
+                    <TextArea placeholder="Tenancy OCID" rows={3} />
+                  )}
+                </FormItem>
+                <FormItem hasFeedback>
+                  {getFieldDecorator('region', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Must pick a region.'
+                      }, {
+                        validator: this.checkConfirm
+                      }
+                    ]
+                  })(
+                    <Select
+                      placeholder="Select a Region"
+                      onChange={this.handleSelectChange}
+                    >
+                      <Option value="us-phoenix-1">us-phoenix-1</Option>
+                      <Option value="us-ashburn-1">us-ashburn-1</Option>
+                    </Select>
+                  )}
                   </FormItem>
-                </Form>
+                      <FormItem hasFeedback>
+                  {getFieldDecorator('upload', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Please upload private key!'
+                      }, {
+                        validator: this.checkConfirm
+                      }
+                    ]
+                        })(
+                          <div>
+
+                    <Upload {...props}>
+                      <Button>
+                        <Icon type="upload" /> Upload Private Key
+                      </Button>
+                    </Upload>
+                  </div>
+                  )}
+                </FormItem> 
+                <FormItem>
+                  <Button type="primary" htmlType="submit">Register</Button>
+                  <div>Or
+                    <Link
+                      style={{
+                      marginLeft: 5
+                    }}
+                      to="/Login">Login</Link>
+                  </div>
+                </FormItem>
+              </Form>
+                </TabPane>
+                </Tabs>
               </Card>
             </Col>
           </Row>

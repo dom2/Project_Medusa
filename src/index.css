@@ -6,8 +6,9 @@ body {
 
 .ant-modal-header{
   background: #F80000 !important;
+  color: #FFF !important;
 }
 
-.cred-form{
+.cred-form, .comp-form{
   margin-bottom: 50px;
 }

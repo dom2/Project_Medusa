@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import logo from '../../theme/images/logo.png';
+import logo from '../../../theme/images/logo.png';
 import {Form, Icon, Input, Button, Modal} from 'antd';
-import {setCredentials} from '../server/Blueprint';
+import {setCredentials} from '../../server/Blueprint';
 const FormItem = Form.Item;
 
 class CredModal extends Component {

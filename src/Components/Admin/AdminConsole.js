@@ -18,7 +18,8 @@ import vmImage from '../../theme/images/vm.png';
 import {getBlueprint, getAllVDI} from '../server/Blueprint';
 import GoldCard from '../Cards/GoldCard';
 import CloneCard from '../Cards/CloneCard';
-import CredentialsModal from './CredentialsModal';
+import CredentialsModal from './Modals/CredentialsModal';
+import CompartmentModal from './Modals/CompartmentModal';
 import Q from 'q';
 
 var confirm = Modal.confirm;
@@ -30,7 +31,9 @@ class AdminConsole extends Component {
       cardTitle: null,
       colCount: 0,
       vms: null,
-      credentials: false
+      credentials: false,
+      compartment: true,
+      loginType:'O'
     }
     this.refreshVMS = this
       .refreshVMS
@@ -39,20 +42,26 @@ class AdminConsole extends Component {
 
   componentDidMount() {
     var that = this;
-    getBlueprint().then(response => {
-      if (response) 
-        this.setState({cardTitle: response.description});
-      if (!response.credentials) 
-        that.getCredentials().then(a => {
-          if (a === 'OK') {
-            this.setState({credentials: false});
-          }
-        });
-      that.refreshVMS();
-    }).catch(error => {
-      console.log(error);
-      return '';
-    });
+    //this.setState({ loginType: localStorage.getItem("loginType") });
+    console.log(this.state.loginType);
+    if (this.state.loginType === 'R') {
+      getBlueprint().then(response => {
+        if (response)
+          this.setState({ cardTitle: response.description });
+        if (!response.credentials)
+          that.getCredentials().then(a => {
+            if (a === 'OK') {
+              this.setState({ credentials: false });
+            }
+          });
+        that.refreshVMS();
+      }).catch(error => {
+        console.log(error);
+        return '';
+      });
+    } else if (this.state.loginType === 'O') {
+      this.setState({compartment: true});
+    };
   }
   refreshVMS() {
     var that = this;
@@ -131,16 +140,25 @@ class AdminConsole extends Component {
           <Row gutter={12}>
             {cols}
           </Row>
-          <CredentialsModal credentials={this.state.credentials}/>
+          <CredentialsModal credentials={this.state.credentials} />
         </div>
       );
-    } else 
-      return (
-        <Button type="primary" size="large" loading>
-          Loading
-        </Button>
+    } else if (this.state.compartment) {
+      return (<div>
+        <Row gutter={12}>
+          {cols}
+        </Row>
+        <CompartmentModal compartment={this.state.compartment}/>
+      </div> 
       );
-    }
+  
+    } else 
+    return (
+      <Button type="primary" size="large" loading>
+        Loading
+      </Button>
+    );
+}
   }
 
 export default AdminConsole;

@@ -3,19 +3,22 @@ export const black = '#000';
 export const slate = '#324B5C';
 export const gray = '#DEE0E0';
 export const white = '#FFF';
+export const green = "#1FB214";
 
 export const colors = {
   red,
   black,
   slate,
   white,
-  gray
+  gray,
+  green
 };
 
 export const contentStyles = {
-  backgroundColor: gray,
+  backgroundColor: slate,
   padding: '30px',
-  marginTop: '64px'
+  marginTop: '64px',
+  height: "100%"
   //textAlign: 'center'
 }
 
@@ -28,6 +31,7 @@ export const medusa = {
 }
 
 export const headStyles = {
+  backgroundColor: gray,
   position: 'fixed',
   width: '100%',
   float: 'left'
@@ -35,6 +39,7 @@ export const headStyles = {
 
 export const cardStyles = {
   //width: 300,
+  backgroundColor: gray,
   textAlign: 'center'
 }
 

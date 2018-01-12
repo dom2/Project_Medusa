@@ -16,7 +16,7 @@ import Register from './Register';
 import AdminNav from '../Admin/AdminNav';
 import {cardStyles, contentStyles, medusa, headStyles} from '../../theme/styles';
 import {Link, Redirect} from "react-router-dom";
-import {checkLogin} from '../server/LoginRegister';
+import {checkLoginOCI} from '../server/LoginRegister';
 const {Header, Content} = Layout;
 const FormItem = Form.Item;
 
@@ -25,7 +25,8 @@ class LoginForm extends Component {
     super();
     this.state = {
       adminRedirect: false,
-      userRedirect: false
+      userRedirect: false,
+      loginType:''
     }
   }
   handleSubmit = (e) => {
@@ -35,12 +36,17 @@ class LoginForm extends Component {
       .form
       .validateFields((err, values) => {
         if (!err) {
-          console.log('Received values of form: ', values);
-          checkLogin(values.userName, values.password).then(a => {
-            if (a === 'Admin') {
+          //console.log('Received values of form: ', values);
+          checkLoginOCI(values.userName, values.password).then(a => {
+            console.log(a[0]);
+            if (a[0] === 'Admin' || a[0] === 'OCIAdmin') {
+              console.log('in');
+              this.setState({loginType: a[1]});
               this.setState({adminRedirect: true});
-            } else if (a === 'User') 
+            } else if (a[0] === 'User') {
+              this.setState({loginType: a[1]});  
               this.setState({userRedirect: true});
+            } 
             }
           );
         }
@@ -110,7 +116,7 @@ class LoginForm extends Component {
               </Card>
             </Col>
           </Row>
-          {this.state.adminRedirect && (<Redirect to='/AdminNav'/>)}
+          {this.state.adminRedirect && (<Redirect to='/AdminNav' />)}
           {this.state.userRedirect && (<Redirect to='/UserNav'/>)}
         </Content>
       </Layout>
