@@ -18,6 +18,7 @@ import vmImage from '../../theme/images/vm.png';
 import {getBlueprint, getAllVDI} from '../server/Blueprint';
 import GoldCard from '../Cards/GoldCard';
 import CloneCard from '../Cards/CloneCard';
+import CompartmentCard from '../Cards/CompartmentCard';
 import CredentialsModal from './Modals/CredentialsModal';
 import CompartmentModal from './Modals/CompartmentModal';
 import Q from 'q';
@@ -33,7 +34,8 @@ class AdminConsole extends Component {
       vms: null,
       credentials: false,
       compartment: true,
-      loginType:'O'
+      loginType: 'O',
+      compSelected: ''
     }
     this.refreshVMS = this
       .refreshVMS
@@ -84,6 +86,12 @@ class AdminConsole extends Component {
       cols.push(
         <Col span={6}>
           <GoldCard title={this.state.cardTitle} refreshVMS={this.refreshVMS} />
+        </Col>
+      );
+    } else {
+      cols.push(
+        <Col span={6}>
+          <CompartmentCard title={this.state.cardTitle} compartmentOpen={this.state.compartment} />
         </Col>
       );
     }
@@ -150,7 +158,7 @@ class AdminConsole extends Component {
         <Row gutter={12}>
           
         </Row>
-        <CompartmentModal compartment={this.state.compartment}/>
+        <CompartmentModal compartment={this.state.compartment} selecteded={this.state.compSelected}/>
       </div> 
       );
   

@@ -11,13 +11,19 @@ class CompModal extends Component {
     this.state = {
       compartment: false,
       compVal: 'validating',
-      compList: []
+      compList: [],
+      listSend: null,
+      selected: ''
     }
   }
 
   componentWillReceiveProps() {
-    this.setState({ compartment: this.props.compartment });
-    this.checkComponents();
+    if (this.props.compartment !== this.state.compartment) {
+      this.setState({ compartment: this.props.compartment });
+      this.setState({ selected: this.props.selecteded });
+      this.checkComponents();
+    }
+    
   }
 
   checkComponents() {
@@ -43,9 +49,18 @@ class CompModal extends Component {
 
   reformatCompartments(comps) {
     var nComps = [];
+    var list = [];
     for (var i = 0; i < comps.length; i++){
-      nComps.push({ value: comps[i].compartment_ocid, label: comps[i].name});
+      var ocid = comps[i].compartment_ocid;
+      var k = comps[i].name;
+      nComps.push({ value: ocid, label: k });
+      
+      var key = ocid;
+      var obj = {};
+      obj[key] = k;
+      list.push(obj);
     }
+    this.setState({ listSend: list });
 
     return nComps;
   }
@@ -59,7 +74,9 @@ class CompModal extends Component {
         if (!err) {
           setCompartment(values.nickname, values.compartment_ocid).then(a => {
             console.log(a);
-            if (a) 
+            if (a)
+              this.setState({ selected: values.nickname});  
+              getInstances(values.nickname);
               this.setState({compartment: false});
             }
           );
@@ -67,8 +84,13 @@ class CompModal extends Component {
       });
   }
 
-  compSelected = (e) => { 
-    getInstances(e).then(response => {
+  compSelected = (e) => {
+    var that = this;
+    console.log(this.state.listSend[0][e]);
+    if(e!=='none found' && e!=='' && this.state.listSend)
+    getInstances(this.state.listSend[0][e]).then(response => {
+      that.setState({ selected: this.state.listSend[0][e]});  
+      that.setState({ compartment: false });
       console.log(response);
     }).catch(error => {
       return error;
@@ -93,7 +115,7 @@ class CompModal extends Component {
           label="Looking for compartments"
           hasFeedback
           validateStatus={this.state.compVal}
-          help="If none found, please enter a compartment below."
+          help="If none found, please register a compartment below."
           >
             
         <Cascader defaultValue={['1']} options={this.state.compList} placeholder="Please Select Compartment" onChange={this.compSelected}/>

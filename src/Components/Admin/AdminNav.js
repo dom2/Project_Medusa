@@ -47,6 +47,7 @@ class AdminNav extends Component {
               <Link to="/AdminNav/UManagement">User Management</Link>
             </Menu.Item>
           </Menu>
+          
           <Menu
             onClick={this.endSession}
             mode="horizontal"

@@ -12,3 +12,7 @@ body {
 .cred-form, .comp-form{
   margin-bottom: 50px;
 }
+
+#root, .ant-layout{
+  height:100%;
+}

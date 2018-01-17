@@ -65,7 +65,7 @@ export async function registerRavello(user, pass, rUser, rPass) {
 }
 
 export async function registerOCI(formData) {
-  var link = url + "ociregister";
+  var link = url + "admin";
   return axios
     .post(link, formData,
     {headers: {
