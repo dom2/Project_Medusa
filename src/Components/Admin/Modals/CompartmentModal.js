@@ -11,7 +11,7 @@ class CompModal extends Component {
     this.state = {
       compartment: false,
       compVal: 'validating',
-      compList: null
+      compList: []
     }
   }
 
@@ -23,12 +23,16 @@ class CompModal extends Component {
   checkComponents() {
     var that = this;
     getCompartments().then(response => {
-      console.log(response);
-      var ocid = response[0].compartment_ocid;
-      getInstances(ocid);
+      
+      if (response !== "Something went wrong.") {
+        that.setState({ compList: that.reformatCompartments(response) });
+        console.log(that.state.compList);
+      }
 
-      that.setState({ compList: response });
-      if (that.state.compList === {}) that.setState({ compList: 'none found' });
+      if (that.state.compList.length <= 0) {
+        that.setState({ compList: [{ label: 'none found', value:'' }] });
+      }
+
       that.setState({ compVal: 'success' });
       
     }).catch(error => {
@@ -38,9 +42,12 @@ class CompModal extends Component {
   }
 
   reformatCompartments(comps) {
+    var nComps = [];
     for (var i = 0; i < comps.length; i++){
-      
+      nComps.push({ value: comps[i].compartment_ocid, label: comps[i].name});
     }
+
+    return nComps;
   }
 
   handleSubmit = (e) => {
@@ -60,6 +67,15 @@ class CompModal extends Component {
       });
   }
 
+  compSelected = (e) => { 
+    getInstances(e).then(response => {
+      console.log(response);
+    }).catch(error => {
+      return error;
+    });
+  }
+  
+
   ////
   //for cascader rename array from ocid to value and nick name to label
   //goes under looking for components
@@ -74,13 +90,13 @@ class CompModal extends Component {
         footer={null}>
         <Form onSubmit={this.handleSubmit} className="comp-form">
         <FormItem
-          label="Validating"
+          label="Looking for compartments"
           hasFeedback
-          validateStatus="this.state.compVal"
-          help="Looking for components..."
+          validateStatus={this.state.compVal}
+          help="If none found, please enter a compartment below."
           >
             
-          
+        <Cascader defaultValue={['1']} options={this.state.compList} placeholder="Please Select Compartment" onChange={this.compSelected}/>
         </FormItem>
           <FormItem>
             {getFieldDecorator('nickname', {

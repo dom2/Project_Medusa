@@ -80,11 +80,13 @@ class AdminConsole extends Component {
 
   render() {
     const cols = [];
-    cols.push(
-      <Col span={6}>
-        <GoldCard title={this.state.cardTitle} refreshVMS={this.refreshVMS}/>
-      </Col>
-    );
+    if (!this.state.compartment) {
+      cols.push(
+        <Col span={6}>
+          <GoldCard title={this.state.cardTitle} refreshVMS={this.refreshVMS} />
+        </Col>
+      );
+    }
     if (this.state.cardTitle && this.state.vms) {
       var vms = this.state.vms;
       for (var i = 0; i < vms.length; i++) {
@@ -146,7 +148,7 @@ class AdminConsole extends Component {
     } else if (this.state.compartment) {
       return (<div>
         <Row gutter={12}>
-          {cols}
+          
         </Row>
         <CompartmentModal compartment={this.state.compartment}/>
       </div> 

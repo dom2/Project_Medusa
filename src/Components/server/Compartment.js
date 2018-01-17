@@ -68,4 +68,28 @@ export async function getInstances(ocid) {
       });
   } else 
     return "logout";
+}
+  
+export async function setRDPCredentials(user, pass) {
+  if (lToken) {
+    var vdi = url + "admin";
+    var auth = {
+      headers: {
+        "Authorization": lToken
+      }
+    }
+    return axios.put(vdi, {
+      username: user,
+      password: pass
+    }, auth)
+      .then(function (response) {
+        console.log(response);
+        return response.statusText;
+      })
+      .catch(function (error) {
+        console.log(error);
+        return 'false';
+      });
+  } else 
+    return "logout";
   }
