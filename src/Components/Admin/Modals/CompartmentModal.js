@@ -6,21 +6,19 @@ const FormItem = Form.Item;
 const { TextArea } = Input;
 
 class CompModal extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       compartment: false,
       compVal: 'validating',
       compList: [],
       listSend: null,
-      selected: ''
     }
   }
 
   componentWillReceiveProps() {
     if (this.props.compartment !== this.state.compartment) {
       this.setState({ compartment: this.props.compartment });
-      this.setState({ selected: this.props.selecteded });
       this.checkComponents();
     }
     
@@ -75,9 +73,8 @@ class CompModal extends Component {
           setCompartment(values.nickname, values.compartment_ocid).then(a => {
             console.log(a);
             if (a)
-              this.setState({ selected: values.nickname});  
-              getInstances(values.nickname);
-              this.setState({compartment: false});
+              this.setState({compartment: false});  
+              this.props.refreshOCI(values.nickname);
             }
           );
         }
@@ -86,15 +83,12 @@ class CompModal extends Component {
 
   compSelected = (e) => {
     var that = this;
-    console.log(this.state.listSend[0][e]);
-    if(e!=='none found' && e!=='' && this.state.listSend)
-    getInstances(this.state.listSend[0][e]).then(response => {
-      that.setState({ selected: this.state.listSend[0][e]});  
-      that.setState({ compartment: false });
-      console.log(response);
-    }).catch(error => {
-      return error;
-    });
+    if (e !== 'none found' && e !== '' && this.state.listSend ) { 
+      var s = this.state.listSend[0][e];
+        this.setState({ compartment: false });
+        this.props.refreshOCI(s);
+    }
+    
   }
   
 

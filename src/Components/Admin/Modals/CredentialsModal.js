@@ -2,21 +2,24 @@ import React, {Component} from 'react';
 import logo from '../../../theme/images/logo.png';
 import {Form, Icon, Input, Button, Modal} from 'antd';
 import {setCredentials} from '../../server/Blueprint';
+import {setRDPCredentials} from '../../server/Compartment';
 
 const FormItem = Form.Item;
 
 
 class CredModal extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       credentials: false
     }
   }
 
   componentWillReceiveProps() {
-    this.setState({credentials: this.props.credentials});
-    console.log('cred ' + this.props.credentials);
+    if (this.props.credentials !== this.state.credentials) {
+      this.setState({ credentials: this.props.credentials });
+      console.log('cred ' + this.props.credentials);
+    }  
   }
 
   handleSubmit = (e) => {
@@ -26,12 +29,22 @@ class CredModal extends Component {
       .form
       .validateFields((err, values) => {
         if (!err) {
-          setCredentials(values.userName, values.password).then(a => {
-            console.log(a);
-            if (a) 
-              this.setState({credentials: false});
-            }
-          );
+          if (this.props.comp) {
+            
+            setRDPCredentials(values.userName, values.password).then(a => {
+              console.log(a);
+              if (a) 
+                this.setState({credentials: false});
+              }
+            );
+          } else {
+            setCredentials(values.userName, values.password).then(a => {
+              console.log(a);
+              if (a) 
+                this.setState({credentials: false});
+              }
+            );
+          }
         }
       });
   }
