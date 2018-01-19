@@ -31,8 +31,8 @@ class InstanceCard extends Component {
   launchVM(vmID) {
     var that = this;
   
-        var w = window.screen.availWidth;
-        var h = window.screen.availHeight;
+        var w = window.screen.availWidth*.95;
+        var h = window.screen.availHeight*.95;
         var message = {
           token: vmID,
           width: w,

@@ -16,12 +16,12 @@ class CompModal extends Component {
     }
   }
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps(nextProps, nextContext) {
+    console.log(nextContext);
     if (this.props.compartment !== this.state.compartment) {
       this.setState({ compartment: this.props.compartment });
-      this.checkComponents();
     }
-    
+    this.checkComponents();
   }
 
   checkComponents() {
@@ -101,7 +101,7 @@ class CompModal extends Component {
     return (
       <Modal
         title="Set Compartment"
-        visible={this.state.compartment}
+        visible={this.props.compartment}
         closable={false}
         footer={null}>
         <Form onSubmit={this.handleSubmit} className="comp-form">
