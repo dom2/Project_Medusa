@@ -8,7 +8,7 @@ import {
   Modal,
   message
 } from 'antd';
-import {createUser, getAllUsers} from '../../server/UserAdmin';
+import {createUser, getAllUsers} from '../../Server/UserAdmin';
 const FormItem = Form.Item;
 
 var generatePassword = require('password-generator');

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import logo from '../../../theme/images/logo.png';
 import {Form, Icon, Input, Button, Modal} from 'antd';
-import {setCredentials} from '../../server/Blueprint';
-import {setRDPCredentials} from '../../server/Compartment';
+import {setCredentials} from '../../Server/Blueprint';
+import {setRDPCredentials} from '../../Server/Compartment';
 
 const FormItem = Form.Item;
 

@@ -12,7 +12,7 @@ import {
 import {cardStyles, vmCard} from '../../theme/styles';
 import {Link} from "react-router-dom";
 import goldImage from '../../theme/images/gold_image.png';
-import {cloneBlueprint, getAllVDI} from '../server/Blueprint';
+import {cloneBlueprint, getAllVDI} from '../Server/Blueprint';
 
 class CompartmentCard extends Component {
 

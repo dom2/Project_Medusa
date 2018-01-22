@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import logo from '../../../theme/images/logo.png';
 import {Form, Icon, Input, Button, Modal, Cascader} from 'antd';
-import {setCompartment, getCompartments, getInstances} from '../../server/Compartment';
+import {setCompartment, getCompartments, getInstances} from '../../Server/Compartment';
 const FormItem = Form.Item;
 const { TextArea } = Input;
 

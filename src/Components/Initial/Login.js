@@ -16,7 +16,7 @@ import Register from './Register';
 import AdminNav from '../Admin/AdminNav';
 import {cardStyles, contentStyles, medusa, headStyles} from '../../theme/styles';
 import {Link, Redirect} from "react-router-dom";
-import {checkLoginOCI} from '../server/LoginRegister';
+import {checkLoginOCI} from '../Server/LoginRegister';
 const {Header, Content} = Layout;
 const FormItem = Form.Item;
 

@@ -13,7 +13,7 @@ import {
 import {cardStyles, vmCard} from '../../theme/styles';
 import {Link} from "react-router-dom";
 import vmImage from '../../theme/images/vm.png';
-import {getUserVDI} from '../server/Blueprint';
+import {getUserVDI} from '../Server/Blueprint';
 import CloneCard from '../Cards/CloneCard';
 import Q from 'q';
 

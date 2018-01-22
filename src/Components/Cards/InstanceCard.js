@@ -12,7 +12,7 @@ import {
 } from 'antd';
 import {cardStyles, vmCard} from '../../theme/styles';
 import {Link} from "react-router-dom";
-import {startStopVM, getVDIToken, destroyVM} from '../server/Blueprint';
+import {startStopVM, getVDIToken, destroyVM} from '../Server/Blueprint';
 import vmImageH from '../../theme/images/vm.png';
 import vmImage from '../../theme/images/vmg.png';
 import Popup from 'popup-window';

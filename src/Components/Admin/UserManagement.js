@@ -10,7 +10,7 @@ import {
 import {cardStyles, vmCard} from '../../theme/styles';
 import {Link} from "react-router-dom";
 import CreateUserModal from './Modals/CreateUserModal';
-import {getAllUsers, assignVM, createUser} from "../server/UserAdmin";
+import {getAllUsers, assignVM, createUser} from "../Server/UserAdmin";
 
 const confirm = Modal.confirm;
 const Option = Select.Option;

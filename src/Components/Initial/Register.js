@@ -18,7 +18,7 @@ import {
 } from 'antd';
 import Login from './Register';
 import AdminConsole from '../Admin/AdminConsole';
-import {registerRavello, registerOCI} from '../server/LoginRegister';
+import {registerRavello, registerOCI} from '../Server/LoginRegister';
 
 import {cardStyles, contentStyles, medusa, headStyles} from '../../theme/styles';
 import { Link, Redirect } from "react-router-dom";

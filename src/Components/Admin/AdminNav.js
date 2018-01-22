@@ -5,7 +5,7 @@ import {Route, Link, Switch} from "react-router-dom";
 import UManagement from './UserManagement';
 import {Layout, Menu} from 'antd';
 import {contentStyles, medusa, headStyles} from '../../theme/styles';
-import {logout} from '../server/LoginRegister';
+import {logout} from '../Server/LoginRegister';
 
 const {Header, Content} = Layout;
 
