@@ -41,10 +41,10 @@ class CompartmentCard extends Component {
         <div style={{
           padding: "12px 0 4px"
         }}>
-           <Button type="primary" size="medium" onClick={() => this.props.getCred}>
+           <Button type="primary" size="default" onClick={() => this.props.getCred}>
             Change RDP
           </Button>  
-          <Button type="primary" size="medium" onClick={() => this.setState({compartmentOpen:true})}>Change Compartment</Button>
+          <Button type="primary" size="default" onClick={() => this.setState({compartmentOpen:true})}>Change Compartment</Button>
         </div>
       </Card>
     );

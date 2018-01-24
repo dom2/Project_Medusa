@@ -16,7 +16,7 @@ import {Link} from "react-router-dom";
 import goldImage from '../../theme/images/gold_image.png';
 import vmImage from '../../theme/images/vm.png';
 import { getBlueprint, getAllVDI } from '../Server/Blueprint';
-import {getInstances} from '../Server/Compartment';
+import {getInstances, getConsoles} from '../Server/Compartment';
 import GoldCard from '../Cards/GoldCard';
 import CloneCard from '../Cards/CloneCard';
 import CompartmentCard from '../Cards/CompartmentCard';
@@ -92,14 +92,24 @@ class AdminConsole extends Component {
     this.setState({ compSelected: com });
     this.setState({ cardTitle: com });
     console.log(com);
+    
     var that = this;
-      getInstances(com).then(response => {
+    var instance = null;
+    getInstances(com).then(response => {
         that.setState({ compartment: false });
-                console.log(response);
+        
         if (response[0]['token']) {
-          that.setState({ instances: 'none' });
-          that.setState({ instances: response });
-        } else that.getCredentials();
+          instance = 'none';
+          instance = Array.from(response);
+          getConsoles(com).then(r => {
+            instance = instance.concat(Array.from(r));
+            console.log(instance);
+            that.setState({ instances: instance });
+          }).catch(error => {
+            return error;
+          });
+        } else if (!response[0]['token'] && instance==='none'){ that.getCredentials(); }
+        
       }).catch(error => {
         return error;
       });
@@ -187,6 +197,7 @@ class AdminConsole extends Component {
         </div>
       );
     } else if (this.state.compartment) {
+      console.log(1);
       return (<div>
         <Row gutter={12}>
           {cols}
@@ -196,6 +207,8 @@ class AdminConsole extends Component {
       );
   
     } else if (this.state.compSelected && !this.state.instances) {
+      console.log(2);
+
       cols.push(
         <Col span={6}>
             <CompartmentCard title={'Compartment: ' + this.state.cardTitle} compartmentOpen={this.state.compartment} getCred={() => this.getCredentials}/>  
@@ -217,7 +230,9 @@ class AdminConsole extends Component {
       </div>
       );
   
-    } else if (this.state.compSelected && this.state.instances==='none') {
+    } else if (this.state.compSelected && this.state.instances === 'none') {
+      console.log(3);
+
       cols.push(
         <Col span={6}>
             <CompartmentCard title={'Compartment: ' + this.state.cardTitle} compartmentOpen={this.state.compartment} getCred={() => this.getCredentials}/>  
@@ -231,7 +246,8 @@ class AdminConsole extends Component {
       </div>
       );
   
-    }else if (this.state.instances) {
+    } else if (this.state.instances) {
+      console.log(4);
       cols.push(
         <Col span={6}>
             <CompartmentCard title={'Compartment: ' + this.state.cardTitle} compartmentOpen={this.state.compartment} getCred={() => this.getCredentials}/>  
@@ -244,7 +260,8 @@ class AdminConsole extends Component {
           <Col span={6}>
             <InstanceCard
               title={vms[i].name}
-              vmID={vms[i]['token']}
+              vmID={vms[i]['token'] ? vms[i]['token'] : vms[i]['ip']}
+              k={vms[i]['key']}
               refreshOCI={() => this.getCompInstances} />
           </Col>
         );

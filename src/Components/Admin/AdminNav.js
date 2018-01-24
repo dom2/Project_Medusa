@@ -36,9 +36,10 @@ class AdminNav extends Component {
             mode="horizontal"
             selectedKeys={[this.state.current]}
             style={{
-            lineHeight: '62px',
+            marginTop: '-12px',
+            lineHeight: '80px',
             float: 'left',
-            color: '#DEE0E0'
+            backgroundColor: '#DEE0E0'
           }}>
             <Menu.Item key="a">
               <Link to="/AdminNav/AdminConsole">Admin Console</Link>
@@ -52,8 +53,10 @@ class AdminNav extends Component {
             onClick={this.endSession}
             mode="horizontal"
             style={{
-            lineHeight: '62px',
-            float: 'right'
+              marginTop: '-12px',
+              lineHeight: '80px',
+              float: 'right',
+              backgroundColor: '#DEE0E0'
           }}>
             <Menu.Item key="1">
               <Link to="/Login">Logout</Link>

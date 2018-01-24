@@ -17,9 +17,10 @@ class UserNav extends Component {
             mode="horizontal"
             selectedKeys="1"
             style={{
-            lineHeight: '62px',
-            float: 'left',
-            color: '#DEE0E0'
+              marginTop: '-12px',
+              lineHeight: '80px',
+              float: 'left',
+              backgroundColor: '#DEE0E0'
           }}>
             <Menu.Item key="1">User Console</Menu.Item>
           </Menu>
@@ -27,7 +28,8 @@ class UserNav extends Component {
           <Menu
             mode="horizontal"
             style={{
-            lineHeight: '62px',
+              marginTop: '-12px',
+              lineHeight: '80px',
             float: 'right'
           }}>
             <Menu.Item key="1">Logout</Menu.Item>

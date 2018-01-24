@@ -17,17 +17,24 @@ class CompModal extends Component {
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    console.log(nextContext);
     if (this.props.compartment !== this.state.compartment) {
       this.setState({ compartment: this.props.compartment });
+      this.checkComponents();
     }
-    this.checkComponents();
+    
+  }
+
+  componentDidMount() {
+    if (this.props.compartment !== this.state.compartment) {
+      this.setState({ compartment: this.props.compartment });
+      this.checkComponents();
+    }
   }
 
   checkComponents() {
     var that = this;
     getCompartments().then(response => {
-      
+      console.log(response);
       if (response !== "Something went wrong.") {
         that.setState({ compList: that.reformatCompartments(response) });
         console.log(that.state.compList);
@@ -101,7 +108,7 @@ class CompModal extends Component {
     return (
       <Modal
         title="Set Compartment"
-        visible={this.props.compartment}
+        visible={this.state.compartment}
         closable={false}
         footer={null}>
         <Form onSubmit={this.handleSubmit} className="comp-form">

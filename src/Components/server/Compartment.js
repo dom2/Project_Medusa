@@ -69,6 +69,27 @@ export async function getInstances(ocid) {
   } else 
     return "logout";
 }
+
+export async function getConsoles(ocid) {
+  if (lToken) {
+    var compartments = url + "console" + "/" + ocid;
+    var auth = {
+      headers: {
+        "Authorization": lToken
+      }
+    }
+    return axios
+      .get(compartments, auth)
+      .then(function (response) {
+        return response.data;
+      })
+      .catch(function (error) {
+        console.log(error);
+        return "Something went wrong.";
+      });
+  } else 
+    return "logout";
+}
   
 export async function setRDPCredentials(user, pass) {
   if (lToken) {
@@ -82,6 +103,27 @@ export async function setRDPCredentials(user, pass) {
       username: user,
       password: pass
     }, auth)
+      .then(function (response) {
+        console.log(response);
+        return response.statusText;
+      })
+      .catch(function (error) {
+        console.log(error);
+        return 'false';
+      });
+  } else 
+    return "logout";
+}
+  
+export async function setConsoleKey(data) {
+  if (lToken) {
+    var vdi = url + "console";
+    var auth = {
+      headers: {
+        "Authorization": lToken
+      }
+    }
+    return axios.put(vdi, data, auth)
       .then(function (response) {
         console.log(response);
         return response.statusText;
