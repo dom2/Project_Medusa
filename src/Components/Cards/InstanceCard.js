@@ -13,7 +13,7 @@ import {
   Upload,
   Form
 } from 'antd';
-import {cardStyles, vmCard, cardIcon} from '../../theme/styles';
+import {cardStyles, vmCard, cardIcon, cardIcon2} from '../../theme/styles';
 import {Link} from "react-router-dom";
 import {startStopVM, getVDIToken, destroyVM} from '../Server/Blueprint';
 import {setConsoleKey} from '../Server/Compartment';
@@ -37,18 +37,24 @@ class InstanceCard2 extends Component {
       win: null,
       upload: false,
       fileList: [],
-      file: null
+      file: null,
+      k: null
     };
   }
-
-
+  componentWillReceiveProps(){
+    
+  }
+  componentDidMount() {
+    this.setState({ k: this.props.k });
+  }
   runVMType() {
-    console.log(this.props.k);
-    if (this.props.k) { 
-      this.launchConsole(this.props.vmID);
-    } else if (this.props.k === false) {
+    console.log(this.state.k);
+    if (this.state.k) {
+      this.launchConsole(this.state.vmID);
+    } else if (this.state.k === false) {
       this.setState({ upload: true });
     } else
+      console.log(this.props.vmID);  
       this.launchVM(this.props.vmID);
   }
 
@@ -137,13 +143,12 @@ class InstanceCard2 extends Component {
           style={{vmCard}}
           cover={<FA
                     name={this.props.t === 'vm' ? 'television' : 'terminal'}
-                    style={cardIcon}
+                    style={cardIcon2}
                   />}
-          actions={[<Button icon="rocket" onClick={this.runVMType()
-          }>Open</Button>]}
+          actions={[<Icon type="rocket" onClick={() => this.runVMType()}/>]}
         >
           <Meta
-            avatar={<Icon style={{ fontSize: 32}} type={this.props.t === 'vm' ? 'windows' : 'linux'}/>}
+            avatar={<Icon style={{ fontSize: 32}} type={this.props.t === 'vm' ? 'windows' : 'qq'}/>}
             title={this.props.title}
             description={this.props.t === 'vm' ? 'Windows VM' : 'Linux Console'}
           />

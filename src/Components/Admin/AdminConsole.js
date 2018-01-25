@@ -226,7 +226,7 @@ class AdminConsole extends Component {
         <Row gutter={12}>
         {cols}
         </Row>
-        <CredentialsModal credentials={this.state.credentials} comp={this.state.compartment} />
+        <CredentialsModal credentials={this.state.credentials} comp={true} />
       </div>
       );
   
@@ -235,7 +235,7 @@ class AdminConsole extends Component {
 
       cols.push(
         <Col span={6}>
-            <CompartmentCard title={this.state.cardTitle} compartmentOpen={this.state.compartment} getCred={this.getCredentials}/>  
+            <CompartmentCard title={this.state.cardTitle} compartmentOpen={this.state.compartment} getCred={this.getCredentials} />  
         </Col>
       );
       return (<div>

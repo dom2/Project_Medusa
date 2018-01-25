@@ -113,7 +113,8 @@ class CompModal extends Component {
         footer={null}>
         <Form onSubmit={this.handleSubmit} className="comp-form">
         <FormItem
-          label="Looking for compartments"
+            label="Looking for compartments"
+          hasFeedback  
           validateStatus={this.state.compVal}
           help="If none found, please register a compartment below."
           >

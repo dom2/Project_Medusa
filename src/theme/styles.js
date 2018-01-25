@@ -1,4 +1,4 @@
-export const red = '#F80000';
+export const red = '#E7404E';
 export const black = '#000';
 export const slate = '#324B5C';
 export const gray = '#DEE0E0';
@@ -60,6 +60,16 @@ export const cardIcon = {
   height: '200px',
   fontSize: 160,
   color: red,
+  textAlign: 'center',
+  backgroundColor: gray,
+  paddingTop: "20px"
+}
+
+export const cardIcon2 = {
+  width: '100%',
+  height: '200px',
+  fontSize: 160,
+  color: slate,
   textAlign: 'center',
   backgroundColor: gray,
   paddingTop: "20px"

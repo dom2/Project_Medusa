@@ -1,7 +1,7 @@
 const { injectBabelPlugin } = require('react-app-rewired');
 const rewireLess = require('react-app-rewire-less');
 
-const red = '#F80000';
+const red = '#E7404E';
 const black = '#000';
 const slate = '#324B5C';
 const gray = '#DEE0E0';
@@ -19,8 +19,8 @@ module.exports = function override(config, env) {
           "@table-header-bg": slate,
           "@table-row-hover-bg": white,
           "@heading-color": white,
-          "@card-head-color": slate,
-          "@card-head-background": white,
+          "@card-head-color": gray,
+          "@card-head-background": red,
           "@layout-header-padding": '10px 50px',
           "@layout-header-background": slate,
           "@layout-header-height": "80px",

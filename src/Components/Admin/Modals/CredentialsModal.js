@@ -19,6 +19,14 @@ class CredModal extends Component {
     if (this.props.credentials !== this.state.credentials) {
       this.setState({ credentials: this.props.credentials });
       console.log('cred ' + this.props.credentials);
+    }
+    
+
+  }
+  componentDidMount() {
+    if (this.props.credentials !== this.state.credentials) {
+      this.setState({ credentials: this.props.credentials });
+      console.log('cred ' + this.props.credentials);
     }  
   }
 
@@ -30,7 +38,6 @@ class CredModal extends Component {
       .validateFields((err, values) => {
         if (!err) {
           if (this.props.comp) {
-            
             setRDPCredentials(values.userName, values.password).then(a => {
               console.log(a);
               if (a) 
