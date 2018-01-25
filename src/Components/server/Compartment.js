@@ -120,10 +120,11 @@ export async function setConsoleKey(data) {
     var vdi = url + "console";
     var auth = {
       headers: {
-        "Authorization": lToken
+        "Authorization": lToken,
+        'Content-Type': 'multipart/form-data'
       }
     }
-    return axios.put(vdi, data, auth)
+    return axios.post(vdi, data, auth)
       .then(function (response) {
         console.log(response);
         return response.statusText;

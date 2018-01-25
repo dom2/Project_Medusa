@@ -7,12 +7,18 @@ import {
   Button,
   Popover,
   InputNumber,
+  Avatar,
   message
 } from 'antd';
 import {cardStyles, vmCard} from '../../theme/styles';
 import {Link} from "react-router-dom";
 import goldImage from '../../theme/images/gold_image.png';
-import {cloneBlueprint, getAllVDI} from '../Server/Blueprint';
+import { cloneBlueprint, getAllVDI } from '../Server/Blueprint';
+
+var FA = require('react-fontawesome');
+
+
+const { Meta } = Card;
 
 class CompartmentCard extends Component {
 
@@ -46,6 +52,23 @@ class CompartmentCard extends Component {
           </Button>  
           <Button type="primary" size="default" onClick={() => this.setState({compartmentOpen:true})}>Change Compartment</Button>
         </div>
+      </Card>
+      <Card
+        style={{vmCard}}
+        cover={<FontAwesome
+                  className='super-crazy-colors'
+                  name='dropbox'
+                  size='2x'
+                  spin
+                  style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)' }}
+                />}
+        actions={[<Icon type="setting" />, <Icon type="edit" />, <Icon type="ellipsis" />]}
+      >
+        <Meta
+          avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+          title="Card title"
+          description="This is the description"
+        />
       </Card>
     );
   }

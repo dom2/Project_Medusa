@@ -31,13 +31,13 @@ class AdminConsole extends Component {
   constructor() {
     super();
     this.state = {
-      cardTitle: null,
+      cardTitle: "first_comp",
       colCount: 0,
       vms: null,
       credentials: false,
       compartment: false,
       loginType: 'O',
-      compSelected: null,
+      compSelected: true,
       instances: null
   }
     this.refreshVMS = this.refreshVMS.bind(this);
@@ -77,11 +77,11 @@ class AdminConsole extends Component {
   }
 
   getCompartment() {
-    this.setState({ compartment: true });
+    this.setState({ compartment: false });
   }
 
   getCredentials() {
-    this.setState({credentials: true});
+    this.setState({credentials: false});
   }
 
   noInstances() {

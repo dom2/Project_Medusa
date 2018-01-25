@@ -46,7 +46,7 @@ export const cardStyles = {
 export const vmCard = {
   //width: 300,
   textAlign: 'center',
-  width: ''
+  width: '300'
 }
 
 export const space = [0, 8, 16, 32, 64];

@@ -41,10 +41,19 @@ class InstanceCard2 extends Component {
 
   runVMType() {
     console.log(this.props.k);
-    if (this.props.k) {} else if (this.props.k === false) {
-      this.setState({upload: true});
-    } else 
-      this.launchVM(this.props.vmID)
+    if (this.props.k) { 
+      this.launchConsole(this.props.vmID);
+    } else if (this.props.k === false) {
+      this.setState({ upload: true });
+    } else
+      this.launchVM(this.props.vmID);
+  }
+
+  launchConsole(ip) {
+    var that = this;
+    var newWindow = window.open("http://129.146.85.80:2222/ssh/host/"+ip, "_blank", "toolbar=no, menubar=no,scrollbars=yes,resizable=yes,width=" + window.screen.width + ",height=" + window.screen.height);
+
+    that.setState({popOpen: true});
   }
 
   launchVM(vmID) {
@@ -96,6 +105,7 @@ class InstanceCard2 extends Component {
   }
 
   handleSubmit = (e) => {
+    var that = this;
     e.preventDefault();
     this
       .props
@@ -105,9 +115,11 @@ class InstanceCard2 extends Component {
         const formData = new FormData();
         formData.append('ip', this.props.vmID);
         formData.append('file', this.state.file);
+        console.log(this.props.vmID);
         setConsoleKey(formData).then(a => {
           if (a === 'OK') {
-            this.setState({upload: false});
+            this.setState({ upload: false });
+            this.props.refreshOCI();
           }
         });
       });
@@ -130,15 +142,12 @@ class InstanceCard2 extends Component {
       },
       beforeUpload: (file) => {
         console.log(file);
-        var ft = file.name.split('.')[1];
-        if (ft === 'pem') {
-          this.setState({ fileList: [] });
-          this.setState({ file: file });
-          this.setState(({ fileList }) => ({
+        this.setState({ fileList: [] });
+        this.setState({ file: file });
+        this.setState(({ fileList }) => ({
             fileList: [...fileList, file],
-          }));
+        }));
           return false;
-        }
       },
       fileList: this.state.fileList,
     };
