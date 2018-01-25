@@ -138,6 +138,7 @@ class CloneCard extends Component {
           </div>
         </div>
       </Card>
+      
     );
   }
 }

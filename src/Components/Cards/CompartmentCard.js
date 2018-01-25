@@ -10,7 +10,7 @@ import {
   Avatar,
   message
 } from 'antd';
-import {cardStyles, vmCard} from '../../theme/styles';
+import {cardStyles, vmCard, compCard, cardIcon} from '../../theme/styles';
 import {Link} from "react-router-dom";
 import goldImage from '../../theme/images/gold_image.png';
 import { cloneBlueprint, getAllVDI } from '../Server/Blueprint';
@@ -35,39 +35,22 @@ class CompartmentCard extends Component {
     }
   }
 
-  handleCreate = (e) => {
-    
-  }
 
   render() {
 
     return (
-      <Card title={this.props.title} bordered={false} style={vmCard}>
-        <img src={goldImage}/>
-        <div style={{
-          padding: "12px 0 4px"
-        }}>
-           <Button type="primary" size="default" onClick={() => this.props.getCred}>
-            Change RDP
-          </Button>  
-          <Button type="primary" size="default" onClick={() => this.setState({compartmentOpen:true})}>Change Compartment</Button>
-        </div>
-      </Card>
       <Card
         style={{vmCard}}
-        cover={<FontAwesome
-                  className='super-crazy-colors'
+        cover={<FA
                   name='dropbox'
-                  size='2x'
-                  spin
-                  style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)' }}
+                  style={cardIcon}
                 />}
-        actions={[<Icon type="setting" />, <Icon type="edit" />, <Icon type="ellipsis" />]}
+        actions={[<Icon type="key" onClick={() => this.props.getCred()}/>, <Icon type="dropbox" onClick={() => this.setState({compartmentOpen:true})}/>]}
       >
         <Meta
-          avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-          title="Card title"
-          description="This is the description"
+          avatar={<Icon style={{ fontSize: 32}} type="dropbox"/>}
+          title={this.props.title}
+          description="Compartment"
         />
       </Card>
     );

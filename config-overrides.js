@@ -20,11 +20,12 @@ module.exports = function override(config, env) {
           "@table-row-hover-bg": white,
           "@heading-color": white,
           "@card-head-color": slate,
-          "@card-head-background": gray,
+          "@card-head-background": white,
           "@layout-header-padding": '10px 50px',
           "@layout-header-background": slate,
           "@layout-header-height": "80px",
-          "@tabs-card-head-background": gray
+          "@tabs-card-head-background": gray,
+           "@label-color": "#797979",
         },
        })(config, env);
         return config;

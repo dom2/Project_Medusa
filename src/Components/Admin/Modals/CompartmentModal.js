@@ -18,7 +18,7 @@ class CompModal extends Component {
 
   componentWillReceiveProps(nextProps, nextContext) {
     if (this.props.compartment !== this.state.compartment) {
-      this.setState({ compartment: this.props.compartment });
+      this.setState({ compartment: this.props.compartment});
       this.checkComponents();
     }
     
@@ -26,7 +26,7 @@ class CompModal extends Component {
 
   componentDidMount() {
     if (this.props.compartment !== this.state.compartment) {
-      this.setState({ compartment: this.props.compartment });
+      this.setState({ compartment: this.props.compartment});
       this.checkComponents();
     }
   }
@@ -114,11 +114,9 @@ class CompModal extends Component {
         <Form onSubmit={this.handleSubmit} className="comp-form">
         <FormItem
           label="Looking for compartments"
-          hasFeedback
           validateStatus={this.state.compVal}
           help="If none found, please register a compartment below."
           >
-            
         <Cascader defaultValue={['1']} options={this.state.compList} placeholder="Please Select Compartment" onChange={this.compSelected}/>
         </FormItem>
           <FormItem>

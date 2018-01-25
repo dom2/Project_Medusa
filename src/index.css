@@ -9,8 +9,12 @@ body {
   color: #FFF !important;
 }
 
+.ant-modal-body{
+  background-color: #DEE0E0;
+}
+
 .cred-form, .comp-form{
-  margin-bottom: 50px;
+  padding-bottom: 40px !important;
 }
 
 #root, .ant-layout{

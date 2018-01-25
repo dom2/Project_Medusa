@@ -38,7 +38,7 @@ export const headStyles = {
 }
 
 export const cardStyles = {
-  //width: 300,
+  width: 400,
   backgroundColor: gray,
   textAlign: 'center'
 }
@@ -46,7 +46,23 @@ export const cardStyles = {
 export const vmCard = {
   //width: 300,
   textAlign: 'center',
-  width: '300'
+  width: '300px'
+}
+
+export const compCard = {
+  //width: 300,
+  textAlign: 'center',
+  width: '300px'
+}
+
+export const cardIcon = {
+  width: '100%',
+  height: '200px',
+  fontSize: 160,
+  color: red,
+  textAlign: 'center',
+  backgroundColor: gray,
+  paddingTop: "20px"
 }
 
 export const space = [0, 8, 16, 32, 64];

@@ -31,7 +31,7 @@ class AdminConsole extends Component {
   constructor() {
     super();
     this.state = {
-      cardTitle: "first_comp",
+      cardTitle: null,
       colCount: 0,
       vms: null,
       credentials: false,
@@ -77,11 +77,11 @@ class AdminConsole extends Component {
   }
 
   getCompartment() {
-    this.setState({ compartment: false });
+    this.setState({ compartment: true });
   }
 
   getCredentials() {
-    this.setState({credentials: false});
+    this.setState({credentials: true});
   }
 
   noInstances() {
@@ -211,7 +211,7 @@ class AdminConsole extends Component {
 
       cols.push(
         <Col span={6}>
-            <CompartmentCard title={'Compartment: ' + this.state.cardTitle} compartmentOpen={this.state.compartment} getCred={() => this.getCredentials}/>  
+            <CompartmentCard title={this.state.cardTitle} compartmentOpen={this.state.compartment} getCred={this.getCredentials}/>  
         </Col>
       );
       cols.push(
@@ -235,7 +235,7 @@ class AdminConsole extends Component {
 
       cols.push(
         <Col span={6}>
-            <CompartmentCard title={'Compartment: ' + this.state.cardTitle} compartmentOpen={this.state.compartment} getCred={() => this.getCredentials}/>  
+            <CompartmentCard title={this.state.cardTitle} compartmentOpen={this.state.compartment} getCred={this.getCredentials}/>  
         </Col>
       );
       return (<div>
@@ -250,7 +250,7 @@ class AdminConsole extends Component {
       console.log(4);
       cols.push(
         <Col span={6}>
-            <CompartmentCard title={'Compartment: ' + this.state.cardTitle} compartmentOpen={this.state.compartment} getCred={() => this.getCredentials}/>  
+            <CompartmentCard title={this.state.cardTitle} compartmentOpen={this.state.compartment} getCred={this.getCredentials}/>  
         </Col>
       );
       var vms = this.state.instances;
@@ -261,6 +261,7 @@ class AdminConsole extends Component {
             <InstanceCard
               title={vms[i].name}
               vmID={vms[i]['token'] ? vms[i]['token'] : vms[i]['ip']}
+              t={vms[i]['token'] ? 'vm' : 'c'}
               k={vms[i]['key']}
               refreshOCI={() => this.getCompInstances} />
           </Col>

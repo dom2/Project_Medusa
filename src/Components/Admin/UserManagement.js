@@ -42,7 +42,7 @@ const content = (
   </Select>
 );
 
-class UserConsole extends Component {
+class UManagement extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -161,4 +161,4 @@ class UserConsole extends Component {
     }
   }
 
-export default UserConsole;
+export default UManagement;

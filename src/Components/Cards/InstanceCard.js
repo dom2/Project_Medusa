@@ -13,14 +13,17 @@ import {
   Upload,
   Form
 } from 'antd';
-import {cardStyles, vmCard} from '../../theme/styles';
+import {cardStyles, vmCard, cardIcon} from '../../theme/styles';
 import {Link} from "react-router-dom";
 import {startStopVM, getVDIToken, destroyVM} from '../Server/Blueprint';
 import {setConsoleKey} from '../Server/Compartment';
 import vmImageH from '../../theme/images/vm.png';
 import vmImage from '../../theme/images/vmg.png';
 import Popup from 'popup-window';
+var FA = require('react-fontawesome');
 
+
+const { Meta } = Card;
 const FormItem = Form.Item;
 
 
@@ -81,29 +84,6 @@ class InstanceCard2 extends Component {
     that.setState({popOpen: true});
   }
 
-  handleMouseOver = (e) => {
-    this.setState({imgSrc: vmImageH});
-  }
-
-  handleMouseOut = (e) => {
-    this.setState({imgSrc: vmImage});
-  }
-  clicked = (e) => {
-    var that = this;
-    if (e.key === "delete") {
-      destroyVM(this.props.vmID);
-    } else {
-      startStopVM(this.props.vmID, e.key);
-    }
-    message.loading('Updating VM', 15, this.props.refreshVMS());
-    window.setTimeout(function () {
-      that
-        .props
-        .refreshVMS();
-    }, 7000);
-
-  }
-
   handleSubmit = (e) => {
     var that = this;
     e.preventDefault();
@@ -153,20 +133,20 @@ class InstanceCard2 extends Component {
     };
     return (
       <span>
-        <Card title={this.props.title} bordered={false} style={vmCard}>
-          <img
-            onMouseOver={(e) => this.handleMouseOver(e)}
-            onMouseOut={(e) => this.handleMouseOut(e)}
-            src={this.state.imgSrc}
-            onClick={() => {
-            this.runVMType()
-          }}/>
-          <br/>
-          <div>
-            <span style={{
-              padding: '0 5px'
-            }}></span>
-          </div>
+        <Card
+          style={{vmCard}}
+          cover={<FA
+                    name={this.props.t === 'vm' ? 'television' : 'terminal'}
+                    style={cardIcon}
+                  />}
+          actions={[<Button icon="rocket" onClick={this.runVMType()
+          }>Open</Button>]}
+        >
+          <Meta
+            avatar={<Icon style={{ fontSize: 32}} type={this.props.t === 'vm' ? 'windows' : 'linux'}/>}
+            title={this.props.title}
+            description={this.props.t === 'vm' ? 'Windows VM' : 'Linux Console'}
+          />
         </Card>
         <Modal
           title="Upload OpenSSL Key"
