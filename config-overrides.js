@@ -3,7 +3,7 @@ const rewireLess = require('react-app-rewire-less');
 
 const red = '#E7404E';
 const black = '#000';
-const slate = '#324B5C';
+const slate = '#071C21';
 const gray = '#DEE0E0';
 const white = '#FFF';
 const green = "#3A913F";

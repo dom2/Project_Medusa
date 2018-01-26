@@ -42,20 +42,19 @@ class InstanceCard2 extends Component {
     };
   }
   componentWillReceiveProps(){
-    
+    if (this.state.k !== this.props.k) {
+      this.setState({ k: this.props.k });
+    }
   }
   componentDidMount() {
     this.setState({ k: this.props.k });
   }
   runVMType() {
-    console.log(this.state.k);
     if (this.state.k) {
-      this.launchConsole(this.state.vmID);
+      this.launchConsole(this.props.vmID);
     } else if (this.state.k === false) {
       this.setState({ upload: true });
-    } else
-      console.log(this.props.vmID);  
-      this.launchVM(this.props.vmID);
+    } else this.launchVM(this.props.vmID);
   }
 
   launchConsole(ip) {
@@ -67,16 +66,17 @@ class InstanceCard2 extends Component {
 
   launchVM(vmID) {
     var that = this;
+    console.log(vmID);
 
-    var w = window.screen.availWidth * .95;
-    var h = window.screen.availHeight * .95;
+    var w = window.screen.availWidth * .99;
+    var h = window.screen.availHeight * .97;
     var message = {
       token: vmID,
       width: w,
       height: h
     };
     var newWindow = window.open("http://129.146.85.80/", "_blank", "toolbar=no, menubar=no,scrollbars=yes,resizable=yes,width=" + window.screen.width + ",height=" + window.screen.height);
-    var intervalID = setInterval(function () {
+    setTimeout(function () {
       newWindow.postMessage(message, "*");
     }, 1000);
 

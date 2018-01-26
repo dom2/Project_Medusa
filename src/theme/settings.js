@@ -1,6 +1,6 @@
 const red = '#F80000';
 const black = '#000';
-const slate = '#324B5C';
+const slate = '#071C21';
 const gray = '#DEE0E0';
 const white = '#FFF';
 const green = "#1FB214";

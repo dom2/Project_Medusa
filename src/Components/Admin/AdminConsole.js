@@ -96,19 +96,17 @@ class AdminConsole extends Component {
     var that = this;
     var instance = null;
     getInstances(com).then(response => {
+      console.log(response);
         that.setState({ compartment: false });
-        
-        if (response[0]['token']) {
-          instance = 'none';
-          instance = Array.from(response);
-          getConsoles(com).then(r => {
-            instance = instance.concat(Array.from(r));
-            console.log(instance);
-            that.setState({ instances: instance });
-          }).catch(error => {
-            return error;
-          });
-        } else if (!response[0]['token'] && instance==='none'){ that.getCredentials(); }
+      getConsoles(com).then(r => {
+          instance = Array.from(r);
+          if (response[0]['token']) {
+            instance = instance.concat(Array.from(response));
+          } else if (!response[0]['token'] && instance === 'none') { that.setState({ credentials: true }); }
+          that.setState({ instances: instance });
+        }).catch(error => {
+          return error;
+        });
         
       }).catch(error => {
         return error;

@@ -1,6 +1,6 @@
 export const red = '#E7404E';
 export const black = '#000';
-export const slate = '#324B5C';
+export const slate = '#071C21';
 export const gray = '#DEE0E0';
 export const white = '#FFF';
 export const green = "#1FB214";
