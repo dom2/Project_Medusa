@@ -13,16 +13,10 @@ import {
 } from 'antd';
 import {cardStyles, vmCard} from '../../theme/styles';
 import {Link} from "react-router-dom";
-import goldImage from '../../theme/images/gold_image.png';
-import vmImage from '../../theme/images/vm.png';
-import { getBlueprint, getAllVDI } from '../Server/Blueprint';
-import {getInstances, getConsoles} from '../Server/Compartment';
-import GoldCard from '../Cards/GoldCard';
-import CloneCard from '../Cards/CloneCard';
+import {getInstances, getCompartments} from '../Server/Compartment';
 import CompartmentCard from '../Cards/CompartmentCard';
 import InstanceCard from '../Cards/InstanceCard';
 import CredentialsModal from './Modals/CredentialsModal';
-import CompartmentModal from './Modals/CompartmentModal';
 import Q from 'q';
 
 var confirm = Modal.confirm;
@@ -37,10 +31,9 @@ class AdminConsole extends Component {
       credentials: false,
       compartment: false,
       loginType: 'O',
-      compSelected: true,
+      compList: null,
       instances: null
   }
-    this.refreshVMS = this.refreshVMS.bind(this);
     this.getCompInstances = this.getCompInstances.bind(this);
     this.getCredentials = this.getCredentials.bind(this);
   }
@@ -48,168 +41,82 @@ class AdminConsole extends Component {
   componentDidMount() {
     var that = this;
     //this.setState({ loginType: localStorage.getItem("loginType") });
-    console.log(this.state.loginType);
-    if (this.state.loginType === 'R') {
-      getBlueprint().then(response => {
-        if (response)
-          this.setState({ cardTitle: response.description });
-        if (!response.credentials)
-          that.getCredentials().then(a => {
-            if (a === 'OK') {
-              this.setState({ credentials: false });
-            }
-          });
-        that.refreshVMS();
-      }).catch(error => {
-        console.log(error);
-        return '';
-      });
-    } else if (this.state.loginType === 'O') {
+    
+    if (this.state.loginType === 'O') {
       that.getCompartment();
-    };
-  }
-  refreshVMS() {
-    var that = this;
-    getAllVDI().then(function (response) {
-      console.log(response);
-      that.setState({vms: response});
-    });
+    }
   }
 
-  getCompartment() {
-    this.setState({ compartment: true });
-  }
 
   getCredentials() {
     this.setState({credentials: true});
   }
 
-  noInstances() {
-    message.info('No Instances found.', 3);
-  }
-
   getCompInstances(com) {
-    this.setState({ compSelected: com });
+    this.setState({ compList: com });
     this.setState({ cardTitle: com });
     console.log(com);
     
     var that = this;
     var instance = null;
     getInstances(com).then(response => {
-      console.log(response);
-        that.setState({ compartment: false });
-      getConsoles(com).then(r => {
-          instance = Array.from(r);
-          if (response[0]['token']) {
-            instance = instance.concat(Array.from(response));
-          } else if (!response[0]['token'] && instance === 'none') { that.setState({ credentials: true }); }
-          that.setState({ instances: instance });
-        }).catch(error => {
-          return error;
-        });
-        
+    
+        instance = Array.from(response);
+        if (response[0]['token']) {
+          instance = instance.concat(Array.from(response));
+        } else if (!response[0]['token'] && instance === 'none') { that.setState({ credentials: true }); }
+        that.setState({ instances: instance });
+      
       }).catch(error => {
         return error;
       });
   }
 
+  getCompartment() {
+    var that = this;
+    getCompartments().then(response => {
+      console.log(response);
+      if (response !== "Something went wrong.") {
+        that.setState({ compList: response});
+        console.log(that.state.compList);
+      }
+
+      if (that.state.compList.length <= 0) {
+        that.setState({ compList: [{ name: 'none found', ocid:'none found' }] });
+      }
+
+      
+    }).catch(error => {
+      return '';
+    });
+  }
+  
+
+
+
   render() {
     const cols = [];
 
-    if (this.state.cardTitle && this.state.vms) {
+    if (this.state.compList) {
       cols.push(
         <Col span={6}>
-          <GoldCard title={this.state.cardTitle} refreshVMS={this.refreshVMS} />
+            <CompartmentCard title={this.state.compList} getCred={this.getCredentials} refreshOCI={() => this.getCompInstances}/> 
         </Col>
       );
-      var vms = this.state.vms;
-      for (var i = 0; i < vms.length; i++) {
-        console.log(vms[i]);
-        cols.push(
-          <Col span={6}>
-            <CloneCard
-              title={vms[i].name}
-              status={vms[i].status}
-              vmID={vms[i].id}
-              user={vms[i].assigned_user}
-              refreshVMS={this.refreshVMS} />
-          </Col>
-        );
-      }
-      return (
-        <div>
-          <Row gutter={12}>
-            {cols}
-          </Row>
-          <CredentialsModal credentials={this.state.credentials} />
-        </div>
-      );
-    } else if (this.state.cardTitle && this.state.vms === {} && !this.state.compSelected) {
-      cols.push(
-        <Col span={6}>
-          <GoldCard title={this.state.cardTitle} refreshVMS={this.refreshVMS} />
-        </Col>
-      );
-      this.noInstances();
-      return (
-        <div>
-          <Row gutter={12}>
-            {cols}
-          </Row>
-          <CredentialsModal credentials={this.state.credentials} />
-        </div>
-      )
-    } else if (this.state.cardTitle && this.state.vms) {
-      cols.push(
-        <Col span={6}>
-          <GoldCard title={this.state.cardTitle} refreshVMS={this.refreshVMS} />
-        </Col>
-      );
-      return (
-        <div>
-          <Row gutter={12}>
-            {cols}
-          </Row>
-          <CredentialsModal credentials={this.state.credentials} />
-        </div>
-      );
-    } else if (this.state.cardTitle && !this.state.compSelected) {
-      cols.push(
-        <Col span={6}>
-          <GoldCard title={this.state.cardTitle} refreshVMS={this.refreshVMS} />
-        </Col>
-      );
-      cols.push(
-        <Col span={8}>
-          <Button type="primary" size="large" loading>
-            Looking for Instances
-          </Button>
-        </Col>
-      );
-      return (
-        <div>
-          <Row gutter={12}>
-            {cols}
-          </Row>
-          <CredentialsModal credentials={this.state.credentials} />
-        </div>
-      );
-    } else if (this.state.compartment) {
       console.log(1);
       return (<div>
         <Row gutter={12}>
           {cols}
         </Row>
-        <CompartmentModal compartment={this.state.compartment} refreshOCI={this.getCompInstances} />
       </div>
       );
   
-    } else if (this.state.compSelected && !this.state.instances) {
+    } else if (this.state.compList && !this.state.instances) {
       console.log(2);
 
       cols.push(
         <Col span={6}>
-            <CompartmentCard title={this.state.cardTitle} compartmentOpen={this.state.compartment} getCred={this.getCredentials}/>  
+            <CompartmentCard title={this.state.compList} getCred={this.getCredentials} refreshOCI={() => this.getCompInstances}/> 
         </Col>
       );
       cols.push(
@@ -228,12 +135,12 @@ class AdminConsole extends Component {
       </div>
       );
   
-    } else if (this.state.compSelected && this.state.instances === 'none') {
+    } else if (this.state.compList && this.state.instances === 'none') {
       console.log(3);
 
       cols.push(
         <Col span={6}>
-            <CompartmentCard title={this.state.cardTitle} compartmentOpen={this.state.compartment} getCred={this.getCredentials} />  
+          <CompartmentCard title={this.state.compList} getCred={this.getCredentials} refreshOCI={() => this.getCompInstances}/> 
         </Col>
       );
       return (<div>
@@ -248,7 +155,7 @@ class AdminConsole extends Component {
       console.log(4);
       cols.push(
         <Col span={6}>
-            <CompartmentCard title={this.state.cardTitle} compartmentOpen={this.state.compartment} getCred={this.getCredentials}/>  
+          <CompartmentCard title={this.state.compList} getCred={this.getCredentials} refreshOCI={() => this.getCompInstances}/>    
         </Col>
       );
       var vms = this.state.instances;
@@ -267,11 +174,9 @@ class AdminConsole extends Component {
       }
       return (
         <div>
-          
           <Row gutter={12}>
             {cols}
           </Row>
-          <CompartmentModal compartment={this.state.compartment} refreshOCI={() => this.getCompInstances} />
           <CredentialsModal credentials={this.state.credentials} comp={true} />
         </div>
       );

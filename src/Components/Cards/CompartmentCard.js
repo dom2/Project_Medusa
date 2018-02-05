@@ -11,9 +11,17 @@ import {
   message
 } from 'antd';
 import {cardStyles, vmCard, compCard, cardIcon} from '../../theme/styles';
-import {Link} from "react-router-dom";
-import goldImage from '../../theme/images/gold_image.png';
-import { cloneBlueprint, getAllVDI } from '../Server/Blueprint';
+import { Link } from "react-router-dom";
+import { Table } from 'antd';
+
+const columns = [
+  { title: 'Compartments', dataIndex: 'name', key: 'name' },
+  { title: 'Action', dataIndex: '', key: 'x', render: () => <a href="#">Open</a> }
+];
+
+
+
+
 
 var FA = require('react-fontawesome');
 
@@ -41,15 +49,16 @@ class CompartmentCard extends Component {
     return (
       <Card
         style={{vmCard}}
-        cover={<FA
-                  name='dropbox'
-                  style={cardIcon}
+        cover={<Table
+                  columns={columns}
+                  expandedRowRender={record => <p style={{ margin: 0 }}>{record.ocid}</p>}
+                  dataSource={this.props.title}
                 />}
-        actions={[<Icon type="key" onClick={() => this.props.getCred()}/>, <Icon type="dropbox" onClick={() => this.setState({compartmentOpen:true})}/>]}
+        actions={[<Icon type="key" onClick={() => this.props.getCred()}/>]}
       >
         <Meta
           avatar={<Icon style={{ fontSize: 32}} type="dropbox"/>}
-          title={this.props.title}
+          title="{Compartments}"
           description="Compartment"
         />
       </Card>

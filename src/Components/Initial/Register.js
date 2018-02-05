@@ -18,7 +18,7 @@ import {
 } from 'antd';
 import Login from './Register';
 import AdminConsole from '../Admin/AdminConsole';
-import {registerRavello, registerOCI} from '../Server/LoginRegister';
+import {registerOCI} from '../Server/LoginRegister';
 
 import {cardStyles, contentStyles, medusa, headStyles} from '../../theme/styles';
 import { Link, Redirect } from "react-router-dom";
@@ -62,13 +62,7 @@ class RegisterForm extends Component {
                 this.setState({ registered: true });
               }
             });
-          }
-          else registerRavello(values.userName, values.password, values.rUserName, values.rPassword).then(a => {
-            if (a === 'OK') {
-              this.setState({registered: true});
-            }
-          });
-       // }
+        }
       });
   }
   checkOPassword = (rule, value, callback) => {
@@ -79,22 +73,7 @@ class RegisterForm extends Component {
       callback();
     }
   }
-  checkOPassword = (rule, value, callback) => {
-    const form = this.props.form;
-    if (value && value !== form.getFieldValue('passwordo')) {
-      callback('Two passwords that you enter is inconsistent!');
-    } else {
-      callback();
-    }
-  }
-  checkRPassword = (rule, value, callback) => {
-    const form = this.props.form;
-    if (value && value !== form.getFieldValue('rPassword')) {
-      callback('Two passwords that you enter is inconsistent!');
-    } else {
-      callback();
-    }
-  }
+
   
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -135,119 +114,7 @@ class RegisterForm extends Component {
           <Row>
             <Col span={6} offset={9}>
               <Card title="Register" bordered={false} style={cardStyles}>
-              <Tabs type="card">
-                <TabPane tab="Ravello" key="1">
-                <Form onSubmit={this.handleSubmit} className="register-form">
-                <FormItem>
-                  {getFieldDecorator('userName', {
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Please input your username!'
-                      }
-                    ]
-                  })(
-                    <Input
-                      prefix={< Icon type = "user" style = {{ fontSize: 13 }}/>}
-                      placeholder="Username"/>
-                  )}
-                </FormItem>
-                <FormItem hasFeedback>
-                  {getFieldDecorator('password', {
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Please input your password!'
-                      }, {
-                        validator: this.checkConfirm
-                      }
-                    ]
-                  })(
-                    <Input
-                      prefix={< Icon type = "lock" style = {{ fontSize: 13 }}/>}
-                      type="password"
-                      placeholder="Password"/>
-                  )}
-                </FormItem>
-                <FormItem hasFeedback>
-                  {getFieldDecorator('confirm', {
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Please confirm your password!'
-                      }, {
-                        validator: this.checkPassword
-                      }
-                    ]
-                  })(
-                    <Input
-                      prefix={< Icon type = "lock" style = {{ fontSize: 13 }}/>}
-                      type="password"
-                      placeholder="Confirm Password"/>
-                  )}
-                </FormItem>
-                <FormItem>
-                  {getFieldDecorator('rUserName', {
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Please input your Ravello username!'
-                      }
-                    ]
-                  })(
-                    <Input
-                      prefix={< Icon type = "user" style = {{ fontSize: 13 }}/>}
-                      placeholder="Ravello Username"/>
-                  )}
-                </FormItem>
-                <FormItem hasFeedback>
-                  {getFieldDecorator('rPassword', {
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Please input your Ravello password!'
-                      }, {
-                        validator: this.checkConfirm
-                      }
-                    ]
-                  })(
-                    <Input
-                      prefix={< Icon type = "lock" style = {{ fontSize: 13 }}/>}
-                      type="password"
-                      placeholder="Ravello Password"/>
-                  )}
-                </FormItem>
-                <FormItem hasFeedback>
-                  {getFieldDecorator('rConfirm', {
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Please confirm your Ravello password!'
-                      }, {
-                        validator: this.checkRPassword
-                      }
-                    ]
-                  })(
-                    <Input
-                      prefix={< Icon type = "lock" style = {{ fontSize: 13 }}/>}
-                      type="password"
-                      placeholder="Confirm Ravello Password"/>
-                  )}
-                </FormItem>
-
-                <FormItem>
-                  <Button type="primary" htmlType="submit">Register</Button>
-                  <div>Or
-                    <Link
-                      style={{
-                      marginLeft: 5
-                    }}
-                      to="/Login">Login</Link>
-                  </div>
-                </FormItem>
-              </Form>
-                </TabPane>
-                <TabPane tab="OCI" key="2">
+              
                 <Form onSubmit={this.handleSubmit} className="register-form">
                 <FormItem>
                   {getFieldDecorator('userNameo', {
@@ -389,8 +256,6 @@ class RegisterForm extends Component {
                   </div>
                 </FormItem>
               </Form>
-                </TabPane>
-                </Tabs>
               </Card>
             </Col>
           </Row>

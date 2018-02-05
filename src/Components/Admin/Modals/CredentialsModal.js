@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import logo from '../../../theme/images/logo.png';
 import {Form, Icon, Input, Button, Modal} from 'antd';
-import {setCredentials} from '../../Server/Blueprint';
 import {setRDPCredentials} from '../../Server/Compartment';
 
 const FormItem = Form.Item;
@@ -39,13 +38,6 @@ class CredModal extends Component {
         if (!err) {
           if (this.props.comp) {
             setRDPCredentials(values.userName, values.password).then(a => {
-              console.log(a);
-              if (a) 
-                this.setState({credentials: false});
-              }
-            );
-          } else {
-            setCredentials(values.userName, values.password).then(a => {
               console.log(a);
               if (a) 
                 this.setState({credentials: false});

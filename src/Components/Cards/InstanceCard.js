@@ -15,7 +15,6 @@ import {
 } from 'antd';
 import {cardStyles, vmCard, cardIcon, cardIcon2} from '../../theme/styles';
 import {Link} from "react-router-dom";
-import {startStopVM, getVDIToken, destroyVM} from '../Server/Blueprint';
 import {setConsoleKey} from '../Server/Compartment';
 import vmImageH from '../../theme/images/vm.png';
 import vmImage from '../../theme/images/vmg.png';
