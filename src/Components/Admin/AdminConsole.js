@@ -25,14 +25,14 @@ class AdminConsole extends Component {
   constructor() {
     super();
     this.state = {
-      cardTitle: null,
       colCount: 0,
       vms: null,
       credentials: false,
       compartment: false,
       loginType: 'O',
       compList: null,
-      instances: null
+      instances: null,
+      compSelected: null,
   }
     this.getCompInstances = this.getCompInstances.bind(this);
     this.getCredentials = this.getCredentials.bind(this);
@@ -53,19 +53,26 @@ class AdminConsole extends Component {
   }
 
   getCompInstances(com) {
-    this.setState({ compList: com });
-    this.setState({ cardTitle: com });
     console.log(com);
-    
+    this.setState({ instances: null });
+    this.setState({ compSelected: null });
+    this.setState({ compSelected: com });
     var that = this;
     var instance = null;
     getInstances(com).then(response => {
-    
-        instance = Array.from(response);
-        if (response[0]['token']) {
-          instance = instance.concat(Array.from(response));
-        } else if (!response[0]['token'] && instance === 'none') { that.setState({ credentials: true }); }
-        that.setState({ instances: instance });
+      console.log(response);
+      if (response === "Something went wrong.") {
+        instance = 'none';
+      } else if (response['windows'].length > 0 || response['linux'].length > 0) {
+        instance = response;
+      } else {
+        instance = 'none';
+      }
+        /*if (response['windows'][0]['token']) {
+        instance = response;
+        } else if (!response[0]['token'] && instance === 'none') { that.setState({ credentials: true }); }*/
+      that.setState({ instances: instance });
+      console.log(that.state.instances);
       
       }).catch(error => {
         return error;
@@ -96,13 +103,12 @@ class AdminConsole extends Component {
 
   render() {
     const cols = [];
-
-    if (this.state.compList) {
-      cols.push(
-        <Col span={6}>
-            <CompartmentCard title={this.state.compList} getCred={this.getCredentials} refreshOCI={() => this.getCompInstances}/> 
-        </Col>
-      );
+    cols.push(
+      <Col span={6}>
+          <CompartmentCard title={this.state.compList} getCred={this.getCredentials} refreshOCI={(r) => this.getCompInstances(r)}/> 
+      </Col>
+    );
+    if (this.state.compList && !this.state.compSelected) {
       console.log(1);
       return (<div>
         <Row gutter={12}>
@@ -113,12 +119,6 @@ class AdminConsole extends Component {
   
     } else if (this.state.compList && !this.state.instances) {
       console.log(2);
-
-      cols.push(
-        <Col span={6}>
-            <CompartmentCard title={this.state.compList} getCred={this.getCredentials} refreshOCI={() => this.getCompInstances}/> 
-        </Col>
-      );
       cols.push(
         <Col span={8}>
           <Button type="primary" size="large" loading>
@@ -131,53 +131,63 @@ class AdminConsole extends Component {
         <Row gutter={12}>
         {cols}
         </Row>
-        <CredentialsModal credentials={this.state.credentials} comp={true} />
+        <CredentialsModal credentials={this.state.credentials} comp={this.state.compSelected} getIns={(r) => this.getCompInstances(r)} />
       </div>
       );
   
     } else if (this.state.compList && this.state.instances === 'none') {
       console.log(3);
-
-      cols.push(
-        <Col span={6}>
-          <CompartmentCard title={this.state.compList} getCred={this.getCredentials} refreshOCI={() => this.getCompInstances}/> 
-        </Col>
-      );
       return (<div>
         <Row gutter={12}>
           {cols}
         </Row>
-        <CredentialsModal credentials={this.state.credentials} comp={this.state.compartment} />
+        <CredentialsModal credentials={this.state.credentials} comp={this.state.compSelected} getIns={(r) => this.getCompInstances(r)} />
       </div>
       );
   
     } else if (this.state.instances) {
       console.log(4);
-      cols.push(
-        <Col span={6}>
-          <CompartmentCard title={this.state.compList} getCred={this.getCredentials} refreshOCI={() => this.getCompInstances}/>    
-        </Col>
-      );
       var vms = this.state.instances;
-      for (var i = 0; i < vms.length; i++) {
-        console.log(vms[i]);
-        cols.push(
-          <Col span={6}>
-            <InstanceCard
-              title={vms[i].name}
-              vmID={vms[i]['token'] ? vms[i]['token'] : vms[i]['ip']}
-              t={vms[i]['token'] ? 'vm' : 'c'}
-              k={vms[i]['key']}
-              refreshOCI={() => this.getCompInstances} />
-          </Col>
-        );
+
+      if (vms['linux'].length > 0) {
+        let lvm = vms['linux']
+        for (var i = 0; i < lvm.length; i++) {
+          console.log(lvm[i]);
+          cols.push(
+            <Col span={6}>
+              <InstanceCard
+                title={lvm[i].name}
+                vmID={lvm[i]['ip']}
+                t={'c'}
+                k={lvm[i]['key']}
+                refreshOCI={(r) => this.getCompInstances(r)} />
+            </Col>
+          );
+        }
       }
+      if (vms['windows'].length > 0) {
+        let wvm = vms['windows'];
+        for (var i = 0; i < wvm.length; i++) {
+          console.log(wvm[i]);
+          cols.push(
+            <Col span={6}>
+              <InstanceCard
+                title={wvm[i].name}
+                vmID={wvm[i].token}
+                t={'vm'}
+                k={null}
+                refreshOCI={(r) => this.getCompInstances(r)} />
+            </Col>
+          );
+        }
+      }
+      
       return (
         <div>
           <Row gutter={12}>
             {cols}
           </Row>
-          <CredentialsModal credentials={this.state.credentials} comp={true} />
+          <CredentialsModal credentials={this.state.credentials} comp={this.state.compSelected} getIns={(r) => this.getCompInstances(r)} />
         </div>
       );
     } else {

@@ -17,7 +17,8 @@ module.exports = function override(config, env) {
           "@body-background": slate,
           "@font-size-base": "16px",
           "@table-header-bg": slate,
-          "@table-row-hover-bg": white,
+          "@table-row-hover-bg": green,
+          "@table-selected-row-bg": white,
           "@heading-color": white,
           "@card-head-color": gray,
           "@card-head-background": red,
@@ -25,7 +26,9 @@ module.exports = function override(config, env) {
           "@layout-header-background": slate,
           "@layout-header-height": "80px",
           "@tabs-card-head-background": gray,
-           "@label-color": "#797979",
+          "@label-color": "#797979",
+           
+
         },
        })(config, env);
         return config;

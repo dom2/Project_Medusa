@@ -13,20 +13,12 @@ import {
 import {cardStyles, vmCard, compCard, cardIcon} from '../../theme/styles';
 import { Link } from "react-router-dom";
 import { Table } from 'antd';
+var FA = require('react-fontawesome');
+const { Meta } = Card;
 
 const columns = [
   { title: 'Compartments', dataIndex: 'name', key: 'name' },
-  { title: 'Action', dataIndex: '', key: 'x', render: () => <a href="#">Open</a> }
 ];
-
-
-
-
-
-var FA = require('react-fontawesome');
-
-
-const { Meta } = Card;
 
 class CompartmentCard extends Component {
 
@@ -43,6 +35,10 @@ class CompartmentCard extends Component {
     }
   }
 
+  selectRow = (record) => {
+    this.props.refreshOCI(record.ocid);
+  }
+
 
   render() {
 
@@ -53,6 +49,11 @@ class CompartmentCard extends Component {
                   columns={columns}
                   expandedRowRender={record => <p style={{ margin: 0 }}>{record.ocid}</p>}
                   dataSource={this.props.title}
+                  onRow={(record) => ({
+                    onClick: () => {
+                      this.selectRow(record);
+                    },
+                  })}
                 />}
         actions={[<Icon type="key" onClick={() => this.props.getCred()}/>]}
       >

@@ -40,7 +40,8 @@ class CredModal extends Component {
             setRDPCredentials(values.userName, values.password).then(a => {
               console.log(a);
               if (a) 
-                this.setState({credentials: false});
+                this.setState({ credentials: false });
+                this.props.getIns(this.props.comp);
               }
             );
           }

@@ -59,7 +59,7 @@ class InstanceCard2 extends Component {
   launchConsole(ip) {
     var that = this;
     var newWindow = window.open("http://129.146.85.80:2222/ssh/host/"+ip, "_blank", "toolbar=no, menubar=no,scrollbars=yes,resizable=yes,width=" + window.screen.width + ",height=" + window.screen.height);
-
+    
     that.setState({popOpen: true});
   }
 
