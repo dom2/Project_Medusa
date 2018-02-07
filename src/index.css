@@ -20,3 +20,13 @@ body {
 #root, .ant-layout{
   height:100%;
 }
+
+.ant-table-pagination.ant-pagination{
+  text-align:center;
+  float: none !important;
+}
+
+.ant-menu-horizontal > .ant-menu-item-selected{
+  border-bottom: 7px solid #3A913F !important;
+  margin-top: -7px !important;
+}

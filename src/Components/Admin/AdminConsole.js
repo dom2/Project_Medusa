@@ -9,7 +9,8 @@ import {
   Dropdown,
   Button,
   Modal,
-  message
+  message,
+  notification
 } from 'antd';
 import {cardStyles, vmCard} from '../../theme/styles';
 import {Link} from "react-router-dom";
@@ -63,6 +64,8 @@ class AdminConsole extends Component {
       console.log(response);
       if (response === "Something went wrong.") {
         instance = 'none';
+        message.warning('You do not have access to this compartment.');
+        
       } else if (response['windows'].length > 0 || response['linux'].length > 0) {
         instance = response;
       } else {
@@ -83,6 +86,7 @@ class AdminConsole extends Component {
     var that = this;
     getCompartments().then(response => {
       console.log(response);
+      
       if (response !== "Something went wrong.") {
         that.setState({ compList: response});
         console.log(that.state.compList);
@@ -176,7 +180,10 @@ class AdminConsole extends Component {
                 vmID={wvm[i].token}
                 t={'vm'}
                 k={null}
-                refreshOCI={(r) => this.getCompInstances(r)} />
+                refreshOCI={(r) => this.getCompInstances(r)}
+                comp={this.state.compSelected}
+              />
+              
             </Col>
           );
         }

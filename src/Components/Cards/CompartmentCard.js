@@ -8,19 +8,22 @@ import {
   Popover,
   InputNumber,
   Avatar,
-  message
+  message,
+  Pagination,
+  Layout
 } from 'antd';
 import {cardStyles, vmCard, compCard, cardIcon} from '../../theme/styles';
 import { Link } from "react-router-dom";
 import { Table } from 'antd';
 var FA = require('react-fontawesome');
 const { Meta } = Card;
+const {Sider} = Layout;
 
 const columns = [
   { title: 'Compartments', dataIndex: 'name', key: 'name' },
 ];
 
-class CompartmentCard extends Component {
+class CompartmentSider extends Component {
 
   constructor(props) {
     super(props);
@@ -39,32 +42,46 @@ class CompartmentCard extends Component {
     this.props.refreshOCI(record.ocid);
   }
 
+  fired() {
+    this.props.getCred();
+  }
+
 
   render() {
-
+    let tablePages = {
+      simple: true,
+      size: "small",
+      pageSize: 8
+    }
     return (
-      <Card
-        style={{vmCard}}
-        cover={<Table
-                  columns={columns}
-                  expandedRowRender={record => <p style={{ margin: 0 }}>{record.ocid}</p>}
-                  dataSource={this.props.title}
-                  onRow={(record) => ({
-                    onClick: () => {
-                      this.selectRow(record);
-                    },
-                  })}
-                />}
-        actions={[<Icon type="key" onClick={() => this.props.getCred()}/>]}
-      >
-        <Meta
-          avatar={<Icon style={{ fontSize: 32}} type="dropbox"/>}
-          title="{Compartments}"
-          description="Compartment"
-        />
-      </Card>
+
+        <Card
+          style={{compCard}}
+          cover={
+                  <Table
+                    columns={columns}
+                    expandedRowRender={record => <p style={{ margin: 0 }}>{record.ocid}</p>}
+                    dataSource={this.props.title}
+                    pagination={tablePages}
+                    onRow={(record) => ({
+                      onClick: () => {
+                        this.selectRow(record);
+                      },
+                    })}
+                  />}
+          actions={[<Icon type="key" onClick={() => this.fired()}/>]}
+        >
+          
+        </Card>
+
     );
   }
 }
 
-export default CompartmentCard;
+export default CompartmentSider;
+
+/*<Meta
+          avatar={<Icon style={{ fontSize: 32}} type="dropbox"/>}
+          title="{Compartments}"
+          description="Compartment"
+        />*/

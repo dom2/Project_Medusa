@@ -73,7 +73,7 @@ export async function setRDPCredentials(user, pass) {
   
 export async function setConsoleKey(data) {
   if (lToken) {
-    var vdi = url + "console";
+    var vdi = url + "instances";
     var auth = {
       headers: {
         "Authorization": lToken,

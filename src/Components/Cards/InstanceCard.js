@@ -11,13 +11,12 @@ import {
   message,
   Modal,
   Upload,
-  Form
+  Form,
+  Input
 } from 'antd';
 import {cardStyles, vmCard, cardIcon, cardIcon2} from '../../theme/styles';
 import {Link} from "react-router-dom";
 import {setConsoleKey} from '../Server/Compartment';
-import vmImageH from '../../theme/images/vm.png';
-import vmImage from '../../theme/images/vmg.png';
 import Popup from 'popup-window';
 var FA = require('react-fontawesome');
 
@@ -30,7 +29,6 @@ class InstanceCard2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      imgSrc: vmImage,
       vmToken: "",
       popOpen: false,
       win: null,
@@ -100,11 +98,12 @@ class InstanceCard2 extends Component {
         const formData = new FormData();
         formData.append('ip', this.props.vmID);
         formData.append('file', this.state.file);
+        formData.append('key', values.password);
         console.log(this.props.vmID);
         setConsoleKey(formData).then(a => {
           if (a === 'OK') {
             this.setState({ upload: false });
-            this.props.refreshOCI();
+            this.props.refreshOCI(this.props.comp);
           }
         });
       });
@@ -158,6 +157,22 @@ class InstanceCard2 extends Component {
           closable={false}
           footer={null}>
           <Form onSubmit={this.handleSubmit} className="comp-form">
+            
+          <FormItem>
+                    {getFieldDecorator('password', {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Please input your Password!'
+                        }
+                      ]
+                    })(
+                      <Input
+                        prefix={< Icon type = "lock" style = {{ fontSize: 13 }}/>}
+                        type="password"
+                        placeholder="Encrypt"/>
+                    )}
+            </FormItem>
             <FormItem hasFeedback>
               {getFieldDecorator('upload', {
                 rules: [

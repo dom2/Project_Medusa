@@ -1,6 +1,6 @@
 export const red = '#E7404E';
 export const black = '#000';
-export const slate = '#071C21';
+export const slate = '#708090';
 export const gray = '#DEE0E0';
 export const white = '#FFF';
 export const green = "#1FB214";
@@ -52,7 +52,8 @@ export const vmCard = {
 export const compCard = {
   //width: 300,
   textAlign: 'center',
-  width: '300px'
+  width: '300px',
+  padding: '0px'
 }
 
 export const cardIcon = {

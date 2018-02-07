@@ -44,9 +44,6 @@ class AdminNav extends Component {
             <Menu.Item key="a">
               <Link to="/AdminNav/AdminConsole">Admin Console</Link>
             </Menu.Item>
-            <Menu.Item key="u">
-              <Link to="/AdminNav/UManagement">User Management</Link>
-            </Menu.Item>
           </Menu>
           
           <Menu
