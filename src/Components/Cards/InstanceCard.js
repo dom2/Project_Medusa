@@ -51,7 +51,11 @@ class InstanceCard2 extends Component {
       this.launchConsole(this.props.vmID);
     } else if (this.state.k === false) {
       this.setState({ upload: true });
-    } else this.launchVM(this.props.vmID);
+    } else if (!this.props.vmID) {
+      this.props.cred();
+      console.log('cred');
+    }
+    else this.launchVM(this.props.vmID);
   }
 
   launchConsole(ip) {

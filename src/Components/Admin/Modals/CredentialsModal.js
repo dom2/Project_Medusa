@@ -54,7 +54,6 @@ class CredModal extends Component {
       <Modal
         title="RDP Credentials Needed"
         visible={this.state.credentials}
-        closable={false}
         footer={null}>
         <Form onSubmit={this.handleSubmit} className="cred-form">
           <FormItem>

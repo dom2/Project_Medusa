@@ -164,7 +164,8 @@ class AdminConsole extends Component {
                 vmID={lvm[i]['ip']}
                 t={'c'}
                 k={lvm[i]['key']}
-                refreshOCI={(r) => this.getCompInstances(r)} />
+                refreshOCI={(r) => this.getCompInstances(r)}
+              />
             </Col>
           );
         }
@@ -182,6 +183,7 @@ class AdminConsole extends Component {
                 k={null}
                 refreshOCI={(r) => this.getCompInstances(r)}
                 comp={this.state.compSelected}
+                cred={() => this.getCredentials()}
               />
               
             </Col>
